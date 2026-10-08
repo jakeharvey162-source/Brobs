@@ -12,6 +12,7 @@ from .oanda_practice import PracticeData
 GRANULARITY_SECONDS = {'M5':300, 'M15':900, 'H1':3600, 'H4':14400, 'D':86400}
 
 def tick(data, book, pairs=('EUR_USD',), granularity='H1', now=None, use_ml=False):
+    fixed_now = now is not None
     now = utc(now or datetime.now(timezone.utc))
     if granularity not in GRANULARITY_SECONDS or not pairs or any(p not in PAIRS for p in pairs):
         raise ValueError('Unsupported granularity or USD-quoted pair')
@@ -47,7 +48,8 @@ def tick(data, book, pairs=('EUR_USD',), granularity='H1', now=None, use_ml=Fals
         raise ValueError('Missing or malformed market quotes')
     key = json.dumps({s:quotes[s]['timestamp'] for s in sorted(pairs)}, sort_keys=True)
     event_id = 'fx:'+hashlib.sha256(key.encode()).hexdigest()
-    result = book.process(quotes, signals, event_id, now)
+    execution_now = now if fixed_now else datetime.now(timezone.utc)
+    result = book.process(quotes, signals, event_id, execution_now)
     book.health('ok', getattr(data, 'source', 'OANDA practice market data'))
     return result
 

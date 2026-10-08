@@ -41,11 +41,11 @@ class FXConfig:
             raise ValueError('Invalid costs')
 
 
-def validate_quotes(quotes, now, config):
+def validate_quotes(quotes, now, config, allowed_symbols=PAIRS):
     if not quotes: raise ValueError('No quotes')
     result = {}
     for symbol, quote in quotes.items():
-        if symbol not in PAIRS: raise ValueError('Only supported USD-quoted pairs are enabled')
+        if symbol not in allowed_symbols: raise ValueError('Unsupported paper instrument')
         bid, ask = float(quote['bid']), float(quote['ask'])
         timestamp = utc(quote['timestamp'])
         age = (now - timestamp).total_seconds()
@@ -89,6 +89,16 @@ def statistics(trades):
 
 
 class FXBook:
+    profile = 'forex'
+    quote_currency = 'USD'
+    allowed_symbols = PAIRS
+
+    def quantize_units(self, units):
+        return math.floor(units)
+
+    def permits_short(self, symbol):
+        return True
+
     def __init__(self, path, config=None):
         self.path = str(path)
         self.config = config or FXConfig()
@@ -99,10 +109,12 @@ class FXBook:
             db.execute('CREATE TABLE IF NOT EXISTS fx_trades (id INTEGER PRIMARY KEY, data TEXT NOT NULL)')
             db.execute('BEGIN IMMEDIATE')
             row = db.execute('SELECT data FROM fx_state WHERE id=1').fetchone()
+            if row and json.loads(row[0]).get('profile', 'forex') != self.profile:
+                raise ValueError('Database asset profile differs. Use a separate database.')
             if row and json.loads(row[0])['config'] != asdict(self.config):
                 raise ValueError('Database risk configuration differs. Use the same settings or a new database.')
             if not row:
-                state = dict(balance=self.config.capital, initial_equity=self.config.capital, positions={},
+                state = dict(profile=self.profile, quote_currency=self.quote_currency, balance=self.config.capital, initial_equity=self.config.capital, positions={},
                     peak=self.config.capital, day=None, day_equity=self.config.capital, halted_reason=None,
                     paused=False, signals={}, quotes={}, last_tick=None, config=asdict(self.config), max_drawdown=0)
                 db.execute('INSERT INTO fx_state VALUES (1,?)', (json.dumps(state, allow_nan=False),))
@@ -122,8 +134,10 @@ class FXBook:
             health_row = db.execute('SELECT data FROM fx_health WHERE id=1').fetchone()
             health = json.loads(health_row[0]) if health_row else {'status':'not_started'}
             events = [json.loads(r[0]) for r in db.execute('SELECT data FROM fx_events ORDER BY rowid DESC LIMIT 30')]
+        state.setdefault('profile', self.profile)
+        state.setdefault('quote_currency', self.quote_currency)
         values = marked(state, state['quotes']) if state['positions'] else dict(equity=state['balance'], unrealized_pnl=0, margin_used=0, free_margin=state['balance'])
-        return dict(mode='LOCAL FX PAPER · USD · NO LEVERAGE', **state, **values,
+        return dict(mode=f'LOCAL {self.profile.upper()} PAPER · {self.quote_currency} · NO LEVERAGE', **state, **values,
                     stats=statistics(trades), trades=trades[-100:], events=events, health=health)
 
     def health(self, status, source, error=None):
@@ -142,10 +156,10 @@ class FXBook:
 
     def process(self, quotes, signals, event_id, now=None):
         now = utc(now or datetime.now(timezone.utc))
-        quotes = validate_quotes(quotes, now, self.config)
+        quotes = validate_quotes(quotes, now, self.config, self.allowed_symbols)
         if not isinstance(event_id, str) or not 0 < len(event_id) <= 500: raise ValueError('Invalid event ID')
         for symbol, signal in signals.items():
-            if symbol not in quotes or signal['action'] not in ('buy', 'sell', 'hold'):
+            if symbol not in quotes or signal['action'] not in ('buy', 'sell', 'hold', 'close'):
                 raise ValueError('Invalid signal')
             if not isinstance(signal['id'], str) or not 0 < len(signal['id']) <= 200: raise ValueError('Invalid signal ID')
         with self.connect() as db:
@@ -188,18 +202,18 @@ class FXBook:
                 if state['signals'].get(symbol) == signal['id']: continue
                 state['signals'][symbol] = signal['id']
                 action = signal['action']; p = state['positions'].get(symbol)
-                if p and ((action == 'sell' and p['units'] > 0) or (action == 'buy' and p['units'] < 0)):
+                if p and (action == 'close' or (action == 'sell' and p['units'] > 0) or (action == 'buy' and p['units'] < 0)):
                     close(symbol, 'opposite_signal')
-                if action == 'hold' or state['paused'] or state['halted_reason'] or symbol in closed or symbol in state['positions']: continue
+                if action in ('hold', 'close') or (action == 'sell' and not self.permits_short(symbol)) or state['paused'] or state['halted_reason'] or symbol in closed or symbol in state['positions']: continue
                 q = quotes[symbol]
                 if (q['ask']-q['bid'])/q['bid'] > self.config.max_spread_fraction: continue
                 sign = 1 if action == 'buy' else -1
                 entry = q['ask']*(1+self.config.slippage_fraction) if sign > 0 else q['bid']*(1-self.config.slippage_fraction)
                 values = marked(state, quotes); nav = values['equity']
                 per_unit_risk = entry*(self.config.stop_fraction+2*self.config.commission_fraction+self.config.slippage_fraction)
-                units = math.floor(min(nav*self.config.risk_fraction/per_unit_risk,
+                units = self.quantize_units(min(nav*self.config.risk_fraction/per_unit_risk,
                     nav*self.config.max_notional_fraction/entry, max(0, values['free_margin'])/(entry*(1+self.config.commission_fraction))))
-                if units < 1: continue
+                if units <= 0: continue
                 fee = units*entry*self.config.commission_fraction
                 position = dict(units=sign*units, entry=entry, entry_fee=fee,
                     stop=entry*(1-sign*self.config.stop_fraction),

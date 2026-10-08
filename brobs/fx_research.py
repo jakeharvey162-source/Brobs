@@ -4,6 +4,8 @@ import csv
 import json
 import math
 import tempfile
+import sqlite3
+from contextlib import closing, contextmanager
 from datetime import timedelta
 from pathlib import Path
 from .fx import FXBook, FXConfig, utc
@@ -24,42 +26,55 @@ def load_forex_csv(path):
             for row in rows:w.writerow({**{k:row[k] for k in ['open','high','low','close','volume']},'timestamp':row['datetime']})
         return load_csv(p)
 
-def replay(rows, start, config=None, spread=.00015, mode='multi_agent', signal_fn=None):
+def replay(rows, start, config=None, spread=.00015, mode='multi_agent', signal_fn=None, row_signal_fn=None, book_class=FXBook, symbol='EUR_USD', spread_fraction=None):
     if not 30 <= start < len(rows) or not math.isfinite(spread) or not 0 <= spread < .01:
         raise ValueError('Invalid start or spread')
-    with tempfile.TemporaryDirectory() as folder:
-        book=FXBook(Path(folder)/'test.db',config or FXConfig())
+    with closing(sqlite3.connect(':memory:')) as connection:
+        class ReplayBook(book_class):
+            @contextmanager
+            def connect(self):
+                with connection:
+                    yield connection
+        book=ReplayBook(':memory:',config or FXConfig())
+        bar_spread=spread
         def q(mid, timestamp):
-            return {'EUR_USD':dict(bid=mid-spread/2,ask=mid+spread/2,timestamp=timestamp.isoformat(),tradeable=True)}
+            return {symbol:dict(bid=mid-bar_spread/2,ask=mid+bar_spread/2,timestamp=timestamp.isoformat(),tradeable=True)}
         for i in range(start,len(rows)):
             r=rows[i];t=utc(r['timestamp'])
+            if spread_fraction is not None:
+                if not math.isfinite(spread_fraction) or not 0 <= spread_fraction < .01:raise ValueError('Invalid spread fraction')
+                bar_spread=r['open']*spread_fraction
             closes=[row['close'] for row in rows[max(0,i-200):i]]
-            if signal_fn is not None:action,votes=signal_fn(closes)
+            if row_signal_fn is not None:
+                position=book.snapshot()['positions'].get(symbol)
+                side=1 if position and position['units']>0 else -1 if position else 0
+                action,votes=row_signal_fn(rows[max(0,i-500):i],side)
+            elif signal_fn is not None:action,votes=signal_fn(closes)
             elif mode=='multi_agent':action,votes=decide(closes)
             elif mode=='sma':
                 from statistics import mean
                 action='buy' if mean(closes[-8:])>mean(closes[-21:]) else 'sell';votes=[]
             else:raise ValueError('Unknown strategy')
-            signals={'EUR_USD':dict(id=str(i),action=action,votes=votes,source='historical CSV')}
+            signals={symbol:dict(id=str(i),action=action,votes=votes,source='historical CSV')}
             book.process(q(r['open'],t),signals,f'{i}:open',t)
-            p=book.snapshot()['positions'].get('EUR_USD')
+            p=book.snapshot()['positions'].get(symbol)
             if p:
                 long=p['units']>0
-                hit_stop=r['low']-spread/2<=p['stop'] if long else r['high']+spread/2>=p['stop']
-                hit_take=r['high']-spread/2>=p['take_profit'] if long else r['low']+spread/2<=p['take_profit']
+                hit_stop=r['low']-bar_spread/2<=p['stop'] if long else r['high']+bar_spread/2>=p['stop']
+                hit_take=r['high']-bar_spread/2>=p['take_profit'] if long else r['low']+bar_spread/2<=p['take_profit']
                 # If both levels touch, assume the stop first. Gap fills were handled at the open.
                 if hit_stop or hit_take:
                     level=p['stop'] if hit_stop else p['take_profit']
-                    mid=level+spread/2 if long else level-spread/2
+                    mid=level+bar_spread/2 if long else level-bar_spread/2
                     at=t+timedelta(microseconds=1)
                     book.process(q(mid,at),{},f'{i}:intrabar',at)
             at=t+timedelta(microseconds=2)
             book.process(q(r['close'],at),{},f'{i}:close',at)
         # Liquidate the final position so metrics include all incurred costs.
-        s=book.snapshot();p=s['positions'].get('EUR_USD')
+        s=book.snapshot();p=s['positions'].get(symbol)
         if p:
             at=utc(rows[-1]['timestamp'])+timedelta(microseconds=3)
-            book.process(q(rows[-1]['close'],at),{'EUR_USD':dict(id='end',action='sell' if p['units']>0 else 'buy')},'liquidate',at)
+            book.process(q(rows[-1]['close'],at),{symbol:dict(id='end',action='close')},'liquidate',at)
         s=book.snapshot()
         return dict(**s['stats'],ending_equity=round(s['equity'],4),return_pct=round((s['equity']/s['initial_equity']-1)*100,4),
             max_drawdown_pct=round(s['max_drawdown']*100,4),halted_reason=s['halted_reason'])

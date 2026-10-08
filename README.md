@@ -75,3 +75,9 @@ The model tested at 50.74% direction accuracy against a 53.38% majority baseline
 ## TradingView and win-rate research
 
 Paste [`tradingview/BROBS.pine`](tradingview/BROBS.pine) into TradingView Pine Editor for EURUSD H1 strategy testing and paper notifications. Follow [installation and alerts](docs/TRADINGVIEW.md). The [70–80% improvement experiment](docs/WIN_RATE_RESEARCH.md) failed later-period checks; the default strategy is retained. A reliable target win rate is not established.
+
+## Stocks and crypto added
+
+The same durable paper accounting now supports separate **stock/USD** and **crypto/USDT** accounts, whole-share stocks, fractional crypto, no leveraged spot shorts, stop/target orders and risk halts. Use [market setup](docs/MARKETS.md) for demo and public/provider data commands. The [multi-market TradingView guide](docs/TRADINGVIEW.md) explains installation, costs and alerts.
+
+Thirty additional candidate evaluations did not establish a reliable 70–80% strategy. Stock sample: 75% on only eight later-period trades; crypto default lost money. See [full results and limitations](docs/MULTI_MARKET_RESULTS.md). These strategies remain paper research.
