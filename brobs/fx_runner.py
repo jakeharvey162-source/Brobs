@@ -41,6 +41,8 @@ def tick(data, book, pairs=('EUR_USD',), granularity='H1', now=None, use_ml=Fals
         signals[pair] = dict(id=granularity+':'+last.isoformat(), action=action, votes=votes,
             source=getattr(data, 'source', 'OANDA practice market data'))
     quotes = data.quotes(pairs)
+    if not isinstance(quotes, dict) or any(pair not in quotes or not isinstance(quotes[pair], dict) or not quotes[pair].get('timestamp') for pair in pairs):
+        raise ValueError('Missing or malformed market quotes')
     key = json.dumps({s:quotes[s]['timestamp'] for s in sorted(quotes)}, sort_keys=True)
     event_id = 'fx:'+hashlib.sha256(key.encode()).hexdigest()
     result = book.process(quotes, signals, event_id, now)
