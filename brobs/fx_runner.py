@@ -3,6 +3,7 @@ import argparse
 import hashlib
 import json
 import time
+from math import isfinite
 from datetime import datetime, timezone, timedelta
 from .fx import FXBook, FXConfig, PAIRS, utc
 from .fx_signals import decide
@@ -23,7 +24,16 @@ def tick(data, book, pairs=('EUR_USD',), granularity='H1', now=None, use_ml=Fals
             raise ValueError('Insufficient completed candle history for '+pair)
         if any(not isinstance(row, dict) or 'timestamp' not in row or 'close' not in row for row in rows):
             raise ValueError('Malformed candle history for '+pair)
-        last = utc(rows[-1]['timestamp'])
+        previous = None
+        for row in rows:
+            price = row['close']
+            if not isinstance(price, (int, float)) or isinstance(price, bool) or not isfinite(price) or price <= 0:
+                raise ValueError('Invalid candle close for '+pair)
+            candle_time = utc(row['timestamp'])
+            if previous is not None and candle_time <= previous:
+                raise ValueError('Unsorted or duplicate candles for '+pair)
+            previous = candle_time
+        last = previous
         age = (now-last).total_seconds()
         if age < GRANULARITY_SECONDS[granularity] or age > GRANULARITY_SECONDS[granularity]*3:
             raise ValueError('Incomplete, stale or future signal candle')
