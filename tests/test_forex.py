@@ -27,7 +27,7 @@ class ForexTests(unittest.TestCase):
                 return [{"timestamp":datetime(2024,1,1,tzinfo=timezone.utc)+timedelta(hours=i),"close":1.1,"open":1.1} for i in range(40)]
         with tempfile.TemporaryDirectory() as folder:
             db=PaperLedger(os.path.join(folder,"paper.db"))
-            self.assertEqual(run_once(FakeData(),db)["status"],"paper_only")
+            self.assertEqual(run_once(FakeData(),db)["status"],"research_only")
             self.assertEqual(run_once(FakeData(),db)["status"],"duplicate_candle")
 
 if __name__=="__main__":unittest.main()
