@@ -62,6 +62,8 @@ class PaperBroker:
         return fill
 
     def apply_stops(self, prices: dict[str, float]) -> list[Fill]:
+        # Reject invalid or incomplete snapshots before mutating positions.
+        self.equity(prices)
         closed = []
         for symbol, position in list(self.portfolio.positions.items()):
             price = prices.get(symbol)
