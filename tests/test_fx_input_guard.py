@@ -59,5 +59,17 @@ class InputGuardTests(unittest.TestCase):
         rows[-1].pop("close")
         self.check_rejected(rows, "Malformed candle")
 
+
+    def test_missing_quotes(self):
+        class Feed:
+            def account_summary(self): return {'currency':'USD'}
+            def candles(self, **kwargs): return self_rows
+            def quotes(self, pairs): return {}
+        class Book:
+            def process(self, *args): raise AssertionError('Must not execute')
+        self_rows = self.valid_rows()
+        with self.assertRaisesRegex(ValueError, 'Missing or malformed market quotes'):
+            tick(Feed(), Book(), now=self.now)
+
 if __name__ == "__main__":
     unittest.main()
