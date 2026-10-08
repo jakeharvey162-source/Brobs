@@ -9,3 +9,8 @@ node_modules/
 *.db-wal
 *.db-shm
 *.log
+
+# Private local Grok reviews, requests and downloaded research inputs
+/grok_request.json
+/grok_review.json
+/local-data/

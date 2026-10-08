@@ -3,7 +3,7 @@ from math import isfinite
 from statistics import mean
 from .fx_signals import decide
 
-FAMILIES=('trend','rsi_pullback','rsi2_reversion','donchian')
+FAMILIES=('trend','rsi_pullback','rsi2_reversion','donchian','grok_consensus')
 
 def rsi(closes,period=14):
     if period<2 or len(closes)<=period:return None
@@ -16,12 +16,15 @@ def rsi(closes,period=14):
 
 def signal(rows,family='trend',side=0,threshold=None,allow_short=False):
     if family not in FAMILIES:raise ValueError('Unknown strategy family')
-    threshold=(40 if family=='rsi_pullback' else 10) if threshold is None else threshold
+    threshold=(40 if family=='rsi_pullback' else 20 if family=='grok_consensus' else 10) if threshold is None else threshold
     if not isfinite(threshold) or not 0 < threshold < 50:raise ValueError('Invalid RSI threshold')
     closes=[r['close'] for r in rows]
     if len(closes)<100 or any(not isfinite(c) or c<=0 for c in closes):
         return 'hold',[dict(agent='data_quality',action='veto',reason='Need 100+ valid completed prices')]
     if family=='trend':return decide(closes)
+    if family=='grok_consensus':
+        from .grok_method import consensus
+        return consensus(rows,side,threshold,allow_short)
     last=closes[-1];regime=mean(closes[-100:]);fast=mean(closes[-5:]);strength=rsi(closes,2 if family=='rsi2_reversion' else 14)
     action='hold'
     if family=='rsi2_reversion':

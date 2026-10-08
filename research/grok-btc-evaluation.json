@@ -1,0 +1,240 @@
+{
+  "market": "crypto",
+  "symbol": "BTC_USDT",
+  "rows": 6552,
+  "test_start": "2026-07-11T02:00:00+00:00",
+  "test_end": "2026-09-30T23:00:00+00:00",
+  "candidates": [
+    {
+      "parameters": {
+        "family": "grok_consensus",
+        "threshold": 10,
+        "stop_fraction": 0.01,
+        "reward_risk": 2
+      },
+      "validation": {
+        "closed_trades": 25,
+        "wins": 6,
+        "losses": 19,
+        "breakeven": 0,
+        "win_rate_pct": 24.0,
+        "win_loss_ratio": 0.316,
+        "profit_factor": 0.094,
+        "net_pnl": -194.5998,
+        "sample_win_rate_95pct_interval": [
+          11.5,
+          43.43
+        ],
+        "evidence": "insufficient_sample",
+        "ending_equity": 9805.4002,
+        "return_pct": -1.946,
+        "max_drawdown_pct": 1.946,
+        "halted_reason": null
+      }
+    },
+    {
+      "parameters": {
+        "family": "grok_consensus",
+        "threshold": 10,
+        "stop_fraction": 0.02,
+        "reward_risk": 2
+      },
+      "validation": {
+        "closed_trades": 24,
+        "wins": 5,
+        "losses": 19,
+        "breakeven": 0,
+        "win_rate_pct": 20.83,
+        "win_loss_ratio": 0.263,
+        "profit_factor": 0.095,
+        "net_pnl": -179.6121,
+        "sample_win_rate_95pct_interval": [
+          9.24,
+          40.47
+        ],
+        "evidence": "insufficient_sample",
+        "ending_equity": 9820.3879,
+        "return_pct": -1.7961,
+        "max_drawdown_pct": 1.7961,
+        "halted_reason": null
+      }
+    },
+    {
+      "parameters": {
+        "family": "grok_consensus",
+        "threshold": 20,
+        "stop_fraction": 0.01,
+        "reward_risk": 2
+      },
+      "validation": {
+        "closed_trades": 51,
+        "wins": 13,
+        "losses": 38,
+        "breakeven": 0,
+        "win_rate_pct": 25.49,
+        "win_loss_ratio": 0.342,
+        "profit_factor": 0.113,
+        "net_pnl": -374.159,
+        "sample_win_rate_95pct_interval": [
+          15.55,
+          38.87
+        ],
+        "evidence": "insufficient_sample",
+        "ending_equity": 9625.841,
+        "return_pct": -3.7416,
+        "max_drawdown_pct": 3.7735,
+        "halted_reason": null
+      }
+    },
+    {
+      "parameters": {
+        "family": "grok_consensus",
+        "threshold": 20,
+        "stop_fraction": 0.02,
+        "reward_risk": 2
+      },
+      "validation": {
+        "closed_trades": 49,
+        "wins": 12,
+        "losses": 37,
+        "breakeven": 0,
+        "win_rate_pct": 24.49,
+        "win_loss_ratio": 0.324,
+        "profit_factor": 0.115,
+        "net_pnl": -354.1775,
+        "sample_win_rate_95pct_interval": [
+          14.6,
+          38.09
+        ],
+        "evidence": "insufficient_sample",
+        "ending_equity": 9645.8225,
+        "return_pct": -3.5418,
+        "max_drawdown_pct": 3.5737,
+        "halted_reason": null
+      }
+    },
+    {
+      "parameters": {
+        "family": "grok_consensus",
+        "threshold": 30,
+        "stop_fraction": 0.01,
+        "reward_risk": 2
+      },
+      "validation": {
+        "closed_trades": 75,
+        "wins": 15,
+        "losses": 60,
+        "breakeven": 0,
+        "win_rate_pct": 20.0,
+        "win_loss_ratio": 0.25,
+        "profit_factor": 0.083,
+        "net_pnl": -551.2722,
+        "sample_win_rate_95pct_interval": [
+          12.51,
+          30.41
+        ],
+        "evidence": "insufficient_sample",
+        "ending_equity": 9448.7278,
+        "return_pct": -5.5127,
+        "max_drawdown_pct": 5.544,
+        "halted_reason": null
+      }
+    },
+    {
+      "parameters": {
+        "family": "grok_consensus",
+        "threshold": 30,
+        "stop_fraction": 0.02,
+        "reward_risk": 2
+      },
+      "validation": {
+        "closed_trades": 70,
+        "wins": 14,
+        "losses": 56,
+        "breakeven": 0,
+        "win_rate_pct": 20.0,
+        "win_loss_ratio": 0.25,
+        "profit_factor": 0.091,
+        "net_pnl": -483.2463,
+        "sample_win_rate_95pct_interval": [
+          12.3,
+          30.82
+        ],
+        "evidence": "insufficient_sample",
+        "ending_equity": 9516.7537,
+        "return_pct": -4.8325,
+        "max_drawdown_pct": 4.8638,
+        "halted_reason": null
+      }
+    }
+  ],
+  "selected": null,
+  "fixed_parameters": {
+    "family": "grok_consensus",
+    "threshold": 20,
+    "stop_fraction": 0.02,
+    "reward_risk": 2
+  },
+  "fixed_later": {
+    "closed_trades": 60,
+    "wins": 9,
+    "losses": 51,
+    "breakeven": 0,
+    "win_rate_pct": 15.0,
+    "win_loss_ratio": 0.176,
+    "profit_factor": 0.106,
+    "net_pnl": -430.3654,
+    "sample_win_rate_95pct_interval": [
+      8.1,
+      26.11
+    ],
+    "evidence": "insufficient_sample",
+    "ending_equity": 9569.6346,
+    "return_pct": -4.3037,
+    "max_drawdown_pct": 4.3037,
+    "halted_reason": null
+  },
+  "fixed_cost_stress": {
+    "closed_trades": 60,
+    "wins": 5,
+    "losses": 55,
+    "breakeven": 0,
+    "win_rate_pct": 8.33,
+    "win_loss_ratio": 0.091,
+    "profit_factor": 0.049,
+    "net_pnl": -608.2229,
+    "sample_win_rate_95pct_interval": [
+      3.61,
+      18.07
+    ],
+    "evidence": "insufficient_sample",
+    "ending_equity": 9391.7771,
+    "return_pct": -6.0822,
+    "max_drawdown_pct": 6.0822,
+    "halted_reason": null
+  },
+  "baseline": {
+    "closed_trades": 55,
+    "wins": 15,
+    "losses": 40,
+    "breakeven": 0,
+    "win_rate_pct": 27.27,
+    "win_loss_ratio": 0.375,
+    "profit_factor": 0.843,
+    "net_pnl": -122.0437,
+    "sample_win_rate_95pct_interval": [
+      17.28,
+      40.23
+    ],
+    "evidence": "insufficient_sample",
+    "ending_equity": 9877.9563,
+    "return_pct": -1.2204,
+    "max_drawdown_pct": 3.1621,
+    "halted_reason": null
+  },
+  "auto_promotion": false,
+  "verified_70_percent": false,
+  "actual_grok_model_backtested": false,
+  "note": "Independent deterministic multi-timeframe method, not historical LLM answers. Six training candidates declared before ETH test. BTC/EURUSD previously inspected; exploratory only. No future probability claim. Default unchanged.",
+  "rejection": "No variant passed 30 closed validation trades, positive net P/L and PF>=1.2."
+}

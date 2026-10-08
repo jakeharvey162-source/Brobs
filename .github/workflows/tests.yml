@@ -16,6 +16,8 @@ jobs:
       - run: python -m brobs.fx_runner --demo --once --db demo_fx.db
       - run: python -m brobs.market_runner --market stock --demo --once --db demo_stock.db
       - run: python -m brobs.market_runner --market crypto --demo --once --db demo_crypto.db
+      - run: python -m brobs.fx_runner --demo --once --strategy grok_consensus --db demo_grok_fx.db
+      - run: python -m brobs.market_runner --market crypto --demo --once --strategy grok_consensus --db demo_grok_crypto.db
   research:
     runs-on: ubuntu-latest
     steps:

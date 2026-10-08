@@ -11,18 +11,21 @@ from .oanda_practice import PracticeData
 
 GRANULARITY_SECONDS = {'M5':300, 'M15':900, 'H1':3600, 'H4':14400, 'D':86400}
 
-def tick(data, book, pairs=('EUR_USD',), granularity='H1', now=None, use_ml=False):
+def tick(data, book, pairs=('EUR_USD',), granularity='H1', now=None, use_ml=False, family='trend', grok_review=None, grok_request=None):
     fixed_now = now is not None
     now = utc(now or datetime.now(timezone.utc))
     if granularity not in GRANULARITY_SECONDS or not pairs or any(p not in PAIRS for p in pairs):
         raise ValueError('Unsupported granularity or USD-quoted pair')
     if len(set(pairs)) != len(pairs):
         raise ValueError('Duplicate trading pairs are not allowed')
+    if family not in ('trend','grok_consensus') or (family=='grok_consensus' and granularity!='H1'):raise ValueError('Grok consensus requires H1')
+    if family!='trend' and use_ml:raise ValueError('ML veto is available only for the original trend strategy')
+    if (grok_review or grok_request) and len(pairs)!=1:raise ValueError('Grok review requires one pair')
     summary = data.account_summary()
     if summary.get('currency') != 'USD': raise ValueError('USD practice account required; currency conversion is not implemented')
     signals = {}
     for pair in pairs:
-        rows = data.candles(instrument=pair, granularity=granularity, count=200)
+        rows = data.candles(instrument=pair, granularity=granularity, count=500 if family=='grok_consensus' else 200)
         if not isinstance(rows, (list, tuple)) or len(rows) < 50:
             raise ValueError('Insufficient completed candle history for '+pair)
         if any(not isinstance(row, dict) or 'timestamp' not in row or 'close' not in row for row in rows):
@@ -41,8 +44,21 @@ def tick(data, book, pairs=('EUR_USD',), granularity='H1', now=None, use_ml=Fals
         if age < GRANULARITY_SECONDS[granularity] or age > GRANULARITY_SECONDS[granularity]*3:
             raise ValueError('Incomplete, stale or future signal candle')
         action, votes = decide([r['close'] for r in rows], use_ml=use_ml)
-        signals[pair] = dict(id=granularity+':'+last.isoformat(), action=action, votes=votes,
+        position=book.snapshot()['positions'].get(pair) if family!='trend' or grok_review or grok_request else None
+        side=1 if position and position['units']>0 else -1 if position else 0
+        if family=='grok_consensus':
+            from .market_signals import signal
+            action,votes=signal(rows,family,side,allow_short=True)
+        signals[pair] = dict(id=(family+':' if family!='trend' else '')+granularity+':'+last.isoformat(), action=action, votes=votes,
             source=getattr(data, 'source', 'OANDA practice market data'))
+        if action in ('buy','sell') and side==0 and (grok_review or grok_request):
+            from .grok_review import request_for,write_json,gate
+            request=request_for(book,pair,rows,signals[pair],now)
+            if grok_request:
+                try:write_json(grok_request,request)
+                except OSError:
+                    signals[pair]={**signals[pair],'id':signals[pair]['id']+':export_failed','action':'hold'}
+            signals[pair]=gate(signals[pair],request,grok_review,now)
     quotes = data.quotes(pairs)
     if not isinstance(quotes, dict) or any(pair not in quotes or not isinstance(quotes[pair], dict) or not quotes[pair].get('timestamp') for pair in pairs):
         raise ValueError('Missing or malformed market quotes')
@@ -60,7 +76,7 @@ class DemoData:
         seconds = GRANULARITY_SECONDS[granularity]
         t = datetime.now(timezone.utc)
         current = datetime.fromtimestamp(int(t.timestamp())//seconds*seconds, timezone.utc)
-        return [dict(timestamp=current-timedelta(seconds=seconds*(count-i)), close=1.08+i*.00005) for i in range(count)]
+        return [dict(timestamp=current-timedelta(seconds=seconds*(count-i)), open=1.08+i*.00005,high=1.0801+i*.00005,low=1.0799+i*.00005,close=1.08+i*.00005,volume=100) for i in range(count)]
     def quotes(self, pairs):
         t = datetime.now(timezone.utc).isoformat()
         return {p:dict(bid=1.0899, ask=1.0901, timestamp=t, tradeable=True) for p in pairs}
@@ -71,6 +87,8 @@ def main():
     p.add_argument('--granularity', choices=tuple(GRANULARITY_SECONDS), default='H1')
     p.add_argument('--interval', type=float, default=30);p.add_argument('--once', action='store_true')
     p.add_argument('--ml-veto', action='store_true', help='Optional local sklearn direction vote; not benchmark-validated')
+    p.add_argument('--strategy',choices=['trend','grok_consensus'],default='trend')
+    p.add_argument('--grok-request');p.add_argument('--grok-review')
     p.add_argument('--demo', action='store_true');p.add_argument('--capital', type=float, default=10000)
     p.add_argument('--risk', type=float, default=.005);p.add_argument('--daily-loss', type=float, default=.02)
     p.add_argument('--pause', action='store_true');p.add_argument('--resume', action='store_true')
@@ -87,7 +105,7 @@ def main():
     try:
         while True:
             try:
-                print(json.dumps(tick(data,book,pairs,a.granularity,use_ml=a.ml_veto),allow_nan=False),flush=True)
+                print(json.dumps(tick(data,book,pairs,a.granularity,use_ml=a.ml_veto,family=a.strategy,grok_request=a.grok_request,grok_review=a.grok_review),allow_nan=False),flush=True)
             except Exception as exc:
                 # Do not log transport messages or request bodies that may contain secrets.
                 book.health('error',data.source if a.demo else 'OANDA practice market data',type(exc).__name__)

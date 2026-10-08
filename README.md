@@ -81,3 +81,7 @@ Paste [`tradingview/BROBS.pine`](tradingview/BROBS.pine) into TradingView Pine E
 The same durable paper accounting now supports separate **stock/USD** and **crypto/USDT** accounts, whole-share stocks, fractional crypto, no leveraged spot shorts, stop/target orders and risk halts. Use [market setup](docs/MARKETS.md) for demo and public/provider data commands. The [multi-market TradingView guide](docs/TRADINGVIEW.md) explains installation, costs and alerts.
 
 Thirty additional candidate evaluations did not establish a reliable 70–80% strategy. Stock sample: 75% on only eight later-period trades; crypto default lost money. See [full results and limitations](docs/MULTI_MARKET_RESULTS.md). These strategies remain paper research.
+
+### Grok methods and entry review
+
+[Setup and measured results](docs/GROK.md): optional free `grok_consensus` research, with completed hourly/four-hour agreement and a structured Grok entry veto. The new method failed the profit/sample selection gates and is not enabled by default. No verified 70% win rate. Actual xAI calls require an explicit one-call CLI flag and your own key; no paid calls were made during development.

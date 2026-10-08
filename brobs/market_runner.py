@@ -11,10 +11,11 @@ from .market_data import BinanceData,AlpacaData
 from .market_signals import FAMILIES,signal
 
 
-def tick(data,book,symbols,family='trend',now=None):
+def tick(data,book,symbols,family='trend',now=None,grok_review=None,grok_request=None):
     fixed_now=now is not None
     now=utc(now or datetime.now(timezone.utc))
     if family not in FAMILIES or len(set(symbols))!=len(symbols):raise ValueError('Invalid strategy or duplicate instruments')
+    if (grok_review or grok_request) and len(symbols)!=1:raise ValueError('Grok review requires exactly one symbol per runner')
     if data.market!=book.profile or not symbols or any(s not in book.allowed_symbols for s in symbols):raise ValueError('Market/ledger mismatch')
     if not data.market_open():
         book.health('closed',data.source,'Exchange closed; no new paper entries. Persisted stops require fresh quotes when reopened.')
@@ -29,6 +30,11 @@ def tick(data,book,symbols,family='trend',now=None):
             side=1 if symbol in positions else 0
             action,votes=signal(rows,family,side)
             signals[symbol]=dict(id=family+':'+last.isoformat(),action=action,votes=votes,source=data.source)
+            if action in ('buy','sell') and side==0 and (grok_review or grok_request):
+                from .grok_review import request_for,write_json,gate
+                request=request_for(book,symbol,rows,signals[symbol],now)
+                if grok_request:write_json(grok_request,request)
+                signals[symbol]=gate(signals[symbol],request,grok_review,now)
         except (ValueError,KeyError,IndexError,OSError):
             signals[symbol]=dict(id='unavailable:'+now.isoformat(),action='hold',votes=[dict(agent='data_quality',action='veto',reason='No usable completed history; entry blocked, fresh-quote stops active')],source=data.source)
     key=json.dumps({s:quotes[s]['timestamp'] for s in sorted(quotes)},sort_keys=True)
@@ -54,6 +60,8 @@ def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--market',choices=['stock','crypto'],required=True)
     p.add_argument('--symbols',nargs='+');p.add_argument('--db');p.add_argument('--strategy',choices=FAMILIES,default='trend');p.add_argument('--demo',action='store_true');p.add_argument('--once',action='store_true');p.add_argument('--interval',type=float,default=30)
     p.add_argument('--pause',action='store_true');p.add_argument('--resume',action='store_true')
+    p.add_argument('--grok-review',help='Optional review JSON; missing/invalid review blocks entries')
+    p.add_argument('--grok-request',help='Export current proposed entry evidence JSON (one symbol)')
     a=p.parse_args()
     if not 5<=a.interval<=3600:p.error('Interval must be 5–3600 seconds')
     if a.pause and a.resume:p.error('Choose pause or resume')
@@ -64,7 +72,7 @@ def main():
     data=DemoData(a.market) if a.demo else BinanceData() if a.market=='crypto' else AlpacaData()
     try:
         while True:
-            try:print(json.dumps(tick(data,book,symbols,a.strategy),allow_nan=False),flush=True)
+            try:print(json.dumps(tick(data,book,symbols,a.strategy,grok_review=a.grok_review,grok_request=a.grok_request),allow_nan=False),flush=True)
             except Exception as exc:
                 book.health('error',data.source,type(exc).__name__)
                 print(json.dumps(dict(status='error',error_type=type(exc).__name__,message='No new entries; check feed, connectivity and freshness.')),flush=True)
