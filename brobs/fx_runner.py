@@ -19,6 +19,8 @@ def tick(data, book, pairs=('EUR_USD',), granularity='H1', now=None, use_ml=Fals
     signals = {}
     for pair in pairs:
         rows = data.candles(instrument=pair, granularity=granularity, count=200)
+        if not rows or not isinstance(rows, (list, tuple)):
+            raise ValueError('No usable completed candle history for '+pair)
         last = utc(rows[-1]['timestamp'])
         age = (now-last).total_seconds()
         if age < GRANULARITY_SECONDS[granularity] or age > GRANULARITY_SECONDS[granularity]*3:
