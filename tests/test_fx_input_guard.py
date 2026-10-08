@@ -71,5 +71,11 @@ class InputGuardTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Missing or malformed market quotes'):
             tick(Feed(), Book(), now=self.now)
 
+    def test_duplicate_pairs_rejected_before_feed_access(self):
+        class Feed:
+            def account_summary(self): raise AssertionError('Must reject duplicate pairs first')
+        with self.assertRaisesRegex(ValueError, 'Duplicate trading pairs'):
+            tick(Feed(), object(), pairs=('EUR_USD','EUR_USD'), now=self.now)
+
 if __name__ == "__main__":
     unittest.main()
