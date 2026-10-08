@@ -1,28 +1,15 @@
-# BROBS implementation status
+# BROBS readiness
 
-## Implemented
-- OHLCV historical CSV ingestion with ordering and validity checks
-- Simple chronological SMA backtest with next-bar-open execution, estimated fees and slippage
-- Baseline optional scikit-learn direction classifier with chronological holdout and baseline accuracy comparison
-- Read-only localhost HTML dashboard for JSON reports
-- Paper-only simulator and unit tests
+A tested local forex-paper app is now implemented. An arbitrary percentage is not evidence of trading readiness.
 
-## Not implemented / not validated
-- No broker/exchange connectors, no credential storage, no live trading or unattended daemon
-- No live streaming data; user must supply licensed real OHLCV CSV data
-- No validated profitable strategy; ML accuracy is not a trading return metric
-- No walk-forward optimizer, corporate actions, dividends, shorting, leverage, FX lot/pip handling, overnight swaps, market calendars, or reliable intrabar stop fills
-- No durable position persistence or trade reconciliation; no security review or production monitoring
+Completed: validated market-data adapter, USD-only FX accounting, durable atomic portfolio/events, polling, loss controls, dashboard, chronological historical replay, win/loss statistics, cost stress, optional Backtrader reference and local sklearn research agent.
 
-## Historical research usage
-```bash
-python -m brobs.cli --csv YOUR_REAL_CANDLES.csv --market stock --symbol AAPL > report.json
-python -m brobs.dashboard --report report.json
-# open http://127.0.0.1:8765
-```
-CSV must have timestamp,open,high,low,close,volume headers; UTC or offset timestamps recommended. Import genuine licensed data yourself; synthetic demo data must not be treated as historical evidence.
+Remaining before broker-connected order readiness:
 
-Optional model: `pip install scikit-learn`, then call `evaluate_direction_model(closes)` on >=100 historical closes.
+1. Validate a credentialed practice-data session, including weekends, stale quotes and disconnections.
+2. Add **practice broker order** submission/reconciliation if requested; it is deliberately absent today.
+3. Model swaps, exact broker instrument specifications, liquidity/partial fills and all supported account conversions.
+4. Run sustained forward-paper testing across several pairs and market regimes. Current evidence has only 28 holdout trades on one pair.
+5. Add deployment authentication, monitoring, encrypted secret management, maintenance procedures and independent security review before public hosting.
 
-## Broker connection plan
-Use official broker APIs with read-only connectivity first. Candidate integrations require user-chosen regulated broker/exchange, account eligibility, instrument specs, explicit risk approval, sandbox testing, secret management and kill switches. Never store credentials in GitHub. TradingView is not required.
+Real-money execution stays disabled. Historical returns do not establish future profits. Existing stock/crypto research remains available but is not broker-integrated.

@@ -1,0 +1,17 @@
+{
+  "whole_sample_direction_model": {
+    "status": "research_only",
+    "test_samples": 946,
+    "out_of_sample_accuracy": 0.5074,
+    "majority_class_baseline": 0.5338
+  },
+  "latest_200bar_optional_vote": {
+    "agent": "ml",
+    "action": "unknown",
+    "reason": "Chronological local model; no calibrated win probability",
+    "holdout_accuracy": 0.4561,
+    "majority_baseline": 0.5439,
+    "test_samples": 57
+  },
+  "note": "Classification accuracy is not profitability. Optional veto is not included in the default trading benchmark."
+}

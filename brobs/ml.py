@@ -6,7 +6,8 @@ def evaluate_direction_model(closes,train_fraction=0.7):
         from sklearn.pipeline import make_pipeline
     except ImportError as e:
         raise RuntimeError("Install optional dependency: pip install scikit-learn") from e
-    if len(closes)<100 or any(p<=0 for p in closes): raise ValueError("Need 100+ positive closes")
+    from math import isfinite
+    if len(closes)<100 or any(not isfinite(p) or p<=0 for p in closes): raise ValueError("Need 100+ positive closes")
     if not 0.5<=train_fraction<=0.85: raise ValueError("Invalid split")
     features=[];labels=[]
     for i in range(10,len(closes)-1):

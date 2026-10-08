@@ -1,0 +1,3 @@
+# Optional public research engines. Core paper app uses Python standard library only.
+backtrader==1.9.78.123
+scikit-learn>=1.5,<2

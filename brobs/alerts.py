@@ -20,6 +20,7 @@ class PaperAlertService:
         symbol=payload.get("symbol")
         if not isinstance(symbol,str) or not 1<=len(symbol)<=32 or not all(c.isalnum() or c in "-_./" for c in symbol): raise ValueError("Invalid symbol")
         market=Market(payload.get("market"))
+        if market==Market.FOREX:raise ValueError("Forex alerts require verified bid/ask quotes through the FX runner")
         action=payload.get("action")
         if action not in ("buy","sell","hold"): raise ValueError("Invalid action")
         price=float(payload.get("price",0))
@@ -36,7 +37,8 @@ def serve(port=8766):
     class Handler(BaseHTTPRequestHandler):
         def do_POST(self):
             if self.path!="/alert":self.send_error(404);return
-            length=int(self.headers.get("Content-Length","0"))
+            try:length=int(self.headers.get("Content-Length","0"))
+            except ValueError:self.send_error(400);return
             if not 0<length<=4096:self.send_error(413);return
             try:
                 payload=json.loads(self.rfile.read(length))

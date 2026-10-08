@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-08",
+  "python_tests": {
+    "passed": 65,
+    "failed": 0
+  },
+  "browser": {
+    "desktop_render": "pass",
+    "mobile_width": 390,
+    "horizontal_overflow": false,
+    "javascript_errors": 0,
+    "state_api": "pass",
+    "refresh": "pass"
+  },
+  "real_provider_session": "not_verified",
+  "real_money_execution": "disabled",
+  "broker_paper_orders": "not_implemented",
+  "benchmark": "eurusd-holdout.json",
+  "reference": "backtrader-reference.json",
+  "ml": "ml-evaluation.json"
+}

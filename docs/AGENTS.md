@@ -17,3 +17,7 @@ Five deterministic agents run without API keys:
 - Qlib (MIT): ML quantitative research, separate from execution.
 
 Do not run multiple order-execution frameworks against the same account without centralized order ownership and reconciled exposure. Next milestones: broker sandbox adapter, accurate calendars/instrument specs, durable event log, monitored runner, real historical walk-forward evaluation, production-grade security review. **Real-money orders are disabled.**
+
+## Current implementation update
+
+The original coordinator above is preserved. The new forex runner uses `fx_signals.py` with forex-scale trend, momentum and volatility votes, then the `fx.py` risk/accounting layer. `ml_agent.py` provides an optional local sklearn veto with an internal chronological validation gate. `fx_runner.py` polls practice-market data; `app.py` reads the durable FX ledger. These are executable components, not external autonomous agents. No verified news/calendar feed or broker-order execution exists.

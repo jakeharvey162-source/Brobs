@@ -1,21 +1,20 @@
-# Forex practice-data integration
+# Forex implementation
 
-**Important:** OANDA practice account provides real broker-hosted forex candles and account summaries, but BROBS does **not** submit OANDA orders. All executions are simulated in BROBS's local paper ledger. This is NOT broker-connected paper order execution.
+Use `python -m brobs.fx_runner` and `python -m brobs.app`. See the root README for setup and thresholds.
 
-OANDA practice API eligibility varies by jurisdiction and account. Create a compatible practice account and token at OANDA if eligible. Do not paste credentials in chat or commit them to GitHub.
+## Implemented and tested
 
-Set environment variables in your shell:
+- OANDA v20 practice-only GET adapter: completed candles, account summary, current bid/ask.
+- USD account / EUR_USD, GBP_USD, AUD_USD, NZD_USD restrictions. Other conversions fail closed.
+- Local long/short P&L in quote USD, spread/slippage/optional commission, stop/take profit, full notional reserve without leverage.
+- Freshness, tradeable-market, valid numeric data and complete marks required before mutations.
+- Atomic SQLite state + events + closed trades; concurrent workers serialize and deduplicate.
+- Completed-candle signals once per bar; stops still evaluated on subsequent quotes for that bar.
+- Persistent pause, daily-loss and peak-drawdown controls; automated polling and recorded health.
+- Browser-tested read-only localhost dashboard; no broker token appears in dashboard state.
 
-- `OANDA_PRACTICE_TOKEN`: personal practice API token
-- `OANDA_PRACTICE_ACCOUNT`: practice account ID
+## Important boundaries
 
-Then:
+This is **broker-data-connected local simulation**, not broker-hosted paper order execution. No POST/PUT order endpoints are present. Practice credentials have not been available for end-to-end provider validation. Eligibility must be checked with the provider.
 
-```bash
-python -m brobs.forex_runner --pair EUR_USD --db brobs_paper.db
-python -m unittest discover -s tests -v
-```
-
-The runner fetches 200 completed H1 midpoint candles from the OANDA practice host, evaluates the five research agents, simulates any eligible trade locally, and saves portfolio state and decisions in SQLite. Run it manually for now; no unattended scheduler is configured. Repeated processing of the same candle is skipped within the last 100 logged events. SQLite event + snapshot writes are transactional, but simultaneous runners and interruption between simulation and persistence need further hardening. The simulated accounting is generic and does not correctly model all FX currency conversions, margin, spreads or rollover charges; its returns must NOT be treated as realistic FX results.
-
-A production broker-paper integration needs the official OANDA practice order endpoint, exact instrument rules, fill reconciliation, margin and account-currency conversion, broker order IDs, idempotency, and safeguards. No live hostname or real-money order function is included.
+No overnight swaps, broker margin calls, leverage, market-depth liquidity, partial fills or execution acknowledgements. Polling cannot enforce guaranteed loss ceilings. The old `forex_runner` intentionally remains research-only for backward compatibility.

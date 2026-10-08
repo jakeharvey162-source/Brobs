@@ -1,5 +1,6 @@
 """OANDA v20 PRACTICE read-only adapter. Never uses live hostname or order endpoints."""
 import json,os,re
+from math import isfinite
 from urllib.request import Request,urlopen
 from urllib.parse import urlencode,quote
 from datetime import datetime,timezone
@@ -26,11 +27,26 @@ class PracticeData:
             if not item.get("complete"):continue
             mid=item["mid"]
             row={"timestamp":datetime.fromisoformat(item["time"].replace("Z","+00:00")),"open":float(mid["o"]),"high":float(mid["h"]),"low":float(mid["l"]),"close":float(mid["c"]),"volume":float(item.get("volume",0))}
-            if min(row[k] for k in ("open","high","low","close"))<=0:raise ValueError("Invalid candle")
+            if any(not isfinite(row[k]) or row[k]<=0 for k in ("open","high","low","close")) or not isfinite(row["volume"]) or row["volume"]<0:raise ValueError("Invalid candle")
+            if row["low"]>min(row["open"],row["close"]) or row["high"]<max(row["open"],row["close"]):raise ValueError("Inconsistent candle range")
             if rows and row["timestamp"]<=rows[-1]["timestamp"]:raise ValueError("Out-of-order candles")
             rows.append(row)
         if len(rows)<30:raise ValueError("Insufficient completed candles")
         return rows
+    def quotes(self,instruments=("EUR_USD",)):
+        if not instruments or any(not PAIR.fullmatch(p) for p in instruments):raise ValueError("Invalid currency pairs")
+        if not re.fullmatch(r"[A-Za-z0-9-]{5,64}",self.account):raise ValueError("Invalid account")
+        payload=self.transport("/v3/accounts/"+quote(self.account)+"/pricing?"+urlencode({"instruments":",".join(instruments)}))
+        result={}
+        for item in payload.get("prices",[]):
+            symbol=item["instrument"]
+            if symbol not in instruments:continue
+            if not item.get("bids") or not item.get("asks"):raise ValueError("Missing executable bid/ask")
+            result[symbol]={"bid":float(item["bids"][0]["price"]),"ask":float(item["asks"][0]["price"]),
+                "timestamp":item["time"],"tradeable":item.get("status")=="tradeable"}
+        if set(result)!=set(instruments):raise ValueError("Missing instrument quotes")
+        return result
+
     def account_summary(self):
         if not re.fullmatch(r"[A-Za-z0-9-]{5,64}",self.account):raise ValueError("Invalid account")
         result=self.transport("/v3/accounts/"+quote(self.account)+"/summary")
