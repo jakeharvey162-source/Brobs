@@ -24,7 +24,7 @@ def load_forex_csv(path):
             for row in rows:w.writerow({**{k:row[k] for k in ['open','high','low','close','volume']},'timestamp':row['datetime']})
         return load_csv(p)
 
-def replay(rows, start, config=None, spread=.00015, mode='multi_agent'):
+def replay(rows, start, config=None, spread=.00015, mode='multi_agent', signal_fn=None):
     if not 30 <= start < len(rows) or not math.isfinite(spread) or not 0 <= spread < .01:
         raise ValueError('Invalid start or spread')
     with tempfile.TemporaryDirectory() as folder:
@@ -34,7 +34,8 @@ def replay(rows, start, config=None, spread=.00015, mode='multi_agent'):
         for i in range(start,len(rows)):
             r=rows[i];t=utc(r['timestamp'])
             closes=[row['close'] for row in rows[max(0,i-200):i]]
-            if mode=='multi_agent':action,votes=decide(closes)
+            if signal_fn is not None:action,votes=signal_fn(closes)
+            elif mode=='multi_agent':action,votes=decide(closes)
             elif mode=='sma':
                 from statistics import mean
                 action='buy' if mean(closes[-8:])>mean(closes[-21:]) else 'sell';votes=[]

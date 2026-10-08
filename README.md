@@ -71,3 +71,7 @@ The model tested at 50.74% direction accuracy against a 53.38% majority baseline
 ## Existing interfaces
 
 `brobs.forex_runner` remains the legacy research-only runner; `brobs.forex_dashboard` is its legacy ledger viewer. Use `brobs.fx_runner` and `brobs.app` for the new FX simulator. Crypto/stock research modules are preserved. TradingView's existing localhost gateway is a separate demo; forex midpoint-only alerts are rejected. No live order endpoint exists.
+
+## TradingView and win-rate research
+
+Paste [`tradingview/BROBS.pine`](tradingview/BROBS.pine) into TradingView Pine Editor for EURUSD H1 strategy testing and paper notifications. Follow [installation and alerts](docs/TRADINGVIEW.md). The [70–80% improvement experiment](docs/WIN_RATE_RESEARCH.md) failed later-period checks; the default strategy is retained. A reliable target win rate is not established.

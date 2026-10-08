@@ -1,0 +1,57 @@
+//@version=6
+//@strategy_alert_message {{strategy.order.alert_message}}
+strategy("BROBS Forex Research", overlay=true, initial_capital=10000, currency=currency.USD, pyramiding=0, margin_long=100, margin_short=100, commission_type=strategy.commission.percent, commission_value=0.0075, slippage=5, calc_on_every_tick=false, process_orders_on_close=false)
+// EURUSD H1 only. Original BROBS trend/momentum rules. No promised win rate.
+// Commission is a spread approximation, not actual broker commissions.
+// Relative bracket ticks use signal-close price; Python uses actual entry price.
+riskFraction = input.float(0.5, "Risk budget (%)", minval=0.1, maxval=2.0) / 100
+stopFraction = input.float(0.5, "Stop distance (%)", minval=0.1, maxval=2.0) / 100
+rewardRisk = input.float(2.0, "Target / stop", minval=1.0, maxval=5.0)
+notionalFraction = input.float(20.0, "Maximum notional / equity (%)", minval=1.0, maxval=25.0) / 100
+startDate = input.time(timestamp("03 Aug 2026 08:00 +0000"), "Start date")
+endDate = input.time(timestamp("25 Sep 2026 21:00 +0000"), "End date (extend for forward paper)")
+strategy.risk.max_intraday_loss(2, strategy.percent_of_equity)
+strategy.risk.max_drawdown(10, strategy.percent_of_equity)
+
+fast = ta.sma(close, 8)
+slow = ta.sma(close, 21)
+momentum = close / close[5] - 1
+volatility = ta.stdev(close / close[1] - 1, 20, true)
+threshold = math.max(0.0002, volatility * 0.5)
+ready = bar_index >= 29 and not na(volatility)
+longSignal = ready and fast > slow * 1.0001 and momentum > threshold and volatility <= 0.015
+shortSignal = ready and fast < slow * 0.9999 and momentum < -threshold and volatility <= 0.015
+supported = syminfo.basecurrency == "EUR" and syminfo.currency == "USD" and timeframe.in_seconds() == 3600
+inWindow = time >= startDate and time < endDate
+lossTicks = math.max(1, math.round(close * stopFraction / syminfo.mintick))
+targetTicks = math.max(1, math.round(lossTicks * rewardRisk))
+riskPerUnit = lossTicks * syminfo.mintick * syminfo.pointvalue
+quantity = math.floor(math.min(strategy.equity * riskFraction / riskPerUnit, strategy.equity * notionalFraction / (close * syminfo.pointvalue)))
+message(action, reason) =>
+    '{"app":"BROBS","symbol":"' + syminfo.tickerid + '","timeframe":"' + timeframe.period + '","signal_time":' + str.tostring(time_close) + ',"action":"' + action + '","reason":"' + reason + '","paper_only":true}'
+
+if barstate.isconfirmed
+    if not inWindow
+        strategy.cancel_all()
+        strategy.close_all(alert_message=message("close", "outside_test_window"))
+    else if supported
+        // Close opposing positions first; never immediately reverse in the same decision.
+        if strategy.position_size > 0 and shortSignal
+            strategy.close("Long", alert_message=message("close_long", "opposite_signal"))
+        else if strategy.position_size < 0 and longSignal
+            strategy.close("Short", alert_message=message("close_short", "opposite_signal"))
+        else if strategy.position_size == 0 and quantity > 0
+            if longSignal
+                strategy.entry("Long", strategy.long, qty=quantity, alert_message=message("buy", "trend_momentum"))
+                strategy.exit("Long bracket", "Long", loss=lossTicks, profit=targetTicks, alert_message=message("close_long", "stop_or_target"))
+            else if shortSignal
+                strategy.entry("Short", strategy.short, qty=quantity, alert_message=message("sell", "trend_momentum"))
+                strategy.exit("Short bracket", "Short", loss=lossTicks, profit=targetTicks, alert_message=message("close_short", "stop_or_target"))
+plot(fast, "Fast 8", color=color.teal)
+plot(slow, "Slow 21", color=color.orange)
+plotshape(supported and inWindow and barstate.isconfirmed and longSignal, title="Buy setup (not a fill)", style=shape.triangleup, location=location.belowbar, color=color.lime, size=size.tiny)
+plotshape(supported and inWindow and barstate.isconfirmed and shortSignal, title="Sell setup (not a fill)", style=shape.triangledown, location=location.abovebar, color=color.red, size=size.tiny)
+var table info = table.new(position.top_right, 1, 2)
+if barstate.islast
+    table.cell(info, 0, 0, supported ? "BROBS — PAPER RESEARCH" : "Use EURUSD, 1-hour chart", text_color=supported ? color.white : color.orange, bgcolor=color.black)
+    table.cell(info, 0, 1, "No verified 70–80% win rate. Check costs and fresh data.", text_color=color.white, bgcolor=color.black)

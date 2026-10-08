@@ -24,3 +24,5 @@ jobs:
       - run: pip install backtrader==1.9.78.123
       - run: python -m brobs.fx_research --csv research/data/EURUSD_1h.csv
       - run: python -m brobs.reference --csv research/data/EURUSD_1h.csv
+      - run: python -m brobs.fx_optimize --csv research/data/EURUSD_1h.csv --output /tmp/reversion-evaluation.json
+      - run: diff research/reversion-evaluation.json /tmp/reversion-evaluation.json
