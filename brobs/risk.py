@@ -19,7 +19,8 @@ class RiskEngine:
         self.config = config
 
     def check_halt(self, portfolio: Portfolio, marked_equity: float) -> bool:
-        if portfolio.equity_at_day_start <= 0 or not isfinite(marked_equity):
+        if (not isfinite(portfolio.equity_at_day_start) or portfolio.equity_at_day_start <= 0
+                or not isfinite(marked_equity) or marked_equity <= 0):
             portfolio.halted = True
         elif marked_equity <= portfolio.equity_at_day_start * (1 - self.config.max_daily_loss_fraction):
             portfolio.halted = True
