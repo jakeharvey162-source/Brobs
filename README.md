@@ -2,6 +2,8 @@
 
 Forex research and autonomous **local paper trading**. Real-money execution is disabled. No guaranteed returns.
 
+See [execution status and engine comparison](docs/EXECUTION_STATUS.md) for the separately tested OANDA practice-entry gateway, broker protection confirmation, remaining automation gaps and exactly which public projects were used. This gateway is not yet connected to the polling runner or dashboard.
+
 The app polls OANDA's practice-data API, evaluates trend/momentum/volatility votes, simulates trades locally and persists positions, trades and decisions in SQLite. It does **not** submit orders to OANDA, and its local paper balance is separate from the broker account balance.
 
 ## Run now — no account required for a labeled demo
