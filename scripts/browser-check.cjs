@@ -11,6 +11,8 @@ const cases=process.env.BROBS_DASHBOARD_CASES?JSON.parse(process.env.BROBS_DASHB
   if(!await page.locator('#positions').textContent().then(s=>s.includes(sample.symbol)))throw Error(sample.profile+' position not rendered');
   if(!await page.locator('#currency-label').textContent().then(s=>s.includes(sample.currency)))throw Error('Wrong account currency');
   if(sample.currency==='USDT'&&!await page.locator('#equity').textContent().then(s=>s.includes('USDT')&&!s.includes('$')))throw Error('USDT displayed as USD');
+  if(!await page.locator('#expectancy').textContent().then(Boolean))throw Error('Expectancy not rendered');
+  if(!await page.locator('#guards').textContent().then(Boolean))throw Error('Entry-guard state not rendered');
   if(process.env.BROBS_EXPECT_FRESH==='1'&&!await page.locator('#connection').textContent().then(s=>s.includes('Connected')))throw Error('Fresh runner state not shown');
   await page.locator('#refresh').click();await page.setViewportSize({width:390,height:844});
   if(!await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth))throw Error('Mobile page overflow');

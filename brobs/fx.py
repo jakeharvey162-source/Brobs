@@ -92,6 +92,7 @@ class FXBook:
     profile = 'forex'
     quote_currency = 'USD'
     allowed_symbols = PAIRS
+    history_limit = 250
 
     def quantize_units(self, units):
         return math.floor(units)
@@ -134,11 +135,15 @@ class FXBook:
             health_row = db.execute('SELECT data FROM fx_health WHERE id=1').fetchone()
             health = json.loads(health_row[0]) if health_row else {'status':'not_started'}
             events = [json.loads(r[0]) for r in db.execute('SELECT data FROM fx_events ORDER BY rowid DESC LIMIT 30')]
+            curve = [json.loads(r[0]) for r in db.execute('SELECT data FROM fx_events ORDER BY rowid DESC LIMIT ?', (self.history_limit,))]
         state.setdefault('profile', self.profile)
         state.setdefault('quote_currency', self.quote_currency)
         values = marked(state, state['quotes']) if state['positions'] else dict(equity=state['balance'], unrealized_pnl=0, margin_used=0, free_margin=state['balance'])
+        from .protections import performance
         return dict(mode=f'LOCAL {self.profile.upper()} PAPER · {self.quote_currency} · NO LEVERAGE', **state, **values,
-                    stats=statistics(trades), trades=trades[-100:], events=events, health=health)
+                    stats=statistics(trades), performance_detail=performance(trades),
+                    equity_history=[dict(timestamp=e['timestamp'],equity=e['equity']) for e in reversed(curve)],
+                    trades=trades[-100:], events=events, health=health)
 
     def health(self, status, source, error=None):
         payload = dict(status=status, source=source, timestamp=datetime.now(timezone.utc).isoformat())
@@ -153,6 +158,15 @@ class FXBook:
             state = json.loads(db.execute('SELECT data FROM fx_state WHERE id=1').fetchone()[0])
             state['paused'] = bool(paused)
             db.execute('UPDATE fx_state SET data=? WHERE id=1', (json.dumps(state, allow_nan=False),))
+
+    def set_entry_protection(self,policy):
+        from .protections import EntryProtection
+        if not isinstance(policy,EntryProtection):raise ValueError('EntryProtection required')
+        with self.connect() as db:
+            db.execute('BEGIN IMMEDIATE')
+            state=json.loads(db.execute('SELECT data FROM fx_state WHERE id=1').fetchone()[0])
+            state['entry_protection']=asdict(policy)
+            db.execute('UPDATE fx_state SET data=? WHERE id=1',(json.dumps(state,allow_nan=False),))
 
     def process(self, quotes, signals, event_id, now=None):
         now = utc(now or datetime.now(timezone.utc))
@@ -175,7 +189,7 @@ class FXBook:
             if state['day'] != now.date().isoformat():
                 state['day'] = now.date().isoformat(); state['day_equity'] = nav
                 if state['halted_reason'] == 'daily_loss': state['halted_reason'] = None
-            fills = []; closed = set()
+            fills = []; closed = set();entry_vetoes=[]
             def close(symbol, reason):
                 p = state['positions'].pop(symbol); q = quotes[symbol]
                 exit_price = q['bid']*(1-self.config.slippage_fraction) if p['units'] > 0 else q['ask']*(1+self.config.slippage_fraction)
@@ -205,6 +219,13 @@ class FXBook:
                 if p and (action == 'close' or (action == 'sell' and p['units'] > 0) or (action == 'buy' and p['units'] < 0)):
                     close(symbol, 'opposite_signal')
                 if action in ('hold', 'close') or (action == 'sell' and not self.permits_short(symbol)) or state['paused'] or state['halted_reason'] or symbol in closed or symbol in state['positions']: continue
+                if state.get('entry_protection'):
+                    from .protections import EntryProtection,reason
+                    policy=EntryProtection(**state['entry_protection'])
+                    recent=[json.loads(r[0]) for r in db.execute("SELECT data FROM fx_trades WHERE json_extract(data,'$.symbol')=? ORDER BY id DESC LIMIT ?",(symbol,max(1,policy.loss_streak_limit)))]
+                    veto=reason(recent,now,policy)
+                    if veto:
+                        entry_vetoes.append(dict(symbol=symbol,reason=veto));continue
                 q = quotes[symbol]
                 if (q['ask']-q['bid'])/q['bid'] > self.config.max_spread_fraction: continue
                 sign = 1 if action == 'buy' else -1
@@ -224,7 +245,7 @@ class FXBook:
             values = marked(state, quotes)
             state['max_drawdown'] = max(state['max_drawdown'], (state['peak']-values['equity'])/state['peak'])
             payload = dict(status='halted' if state['halted_reason'] else 'paused' if state['paused'] else 'paper',
-                timestamp=now.isoformat(), event_id=event_id, fills=fills, signals=signals, **values)
+                timestamp=now.isoformat(), event_id=event_id, fills=fills, signals=signals, entry_vetoes=entry_vetoes, **values)
             db.execute('UPDATE fx_state SET data=? WHERE id=1', (json.dumps(state, allow_nan=False),))
             db.execute('INSERT INTO fx_events VALUES (?,?)', (event_id, json.dumps(payload, allow_nan=False)))
             return payload

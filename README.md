@@ -85,3 +85,7 @@ Thirty additional candidate evaluations did not establish a reliable 70–80% st
 ### Grok methods and entry review
 
 [Setup and measured results](docs/GROK.md): optional free `grok_consensus` research, with completed hourly/four-hour agreement and a structured Grok entry veto. The new method failed the profit/sample selection gates and is not enabled by default. No verified 70% win rate. Actual xAI calls require an explicit one-call CLI flag and your own key; no paid calls were made during development.
+
+### Strategy lab and stronger paper controls
+
+[Comparison, results and setup](docs/PRO_COMPARISON.md): ten-config chronological research, cost-aware band/MACD families, optional evidence-gated entries, durable cooldown/loss-streak guards, forex stop recovery during history failures, and persisted expectancy/equity monitoring. Tested against longer BTC history and existing ETH/EURUSD samples. No candidate met all selection gates; no verified 70% claim or automatic promotion.

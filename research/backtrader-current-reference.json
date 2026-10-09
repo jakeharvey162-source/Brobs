@@ -1,0 +1,11 @@
+{
+  "engine": "backtrader 1.9.78.123",
+  "strategy": "8/21 SMA regime baseline; no brackets",
+  "return_pct": 0.295,
+  "max_drawdown_pct": 0.3642,
+  "closed_trades": 48,
+  "wins": 17,
+  "losses": 31,
+  "win_rate_pct": 35.42,
+  "note": "Independent engine baseline. Different stop and spread assumptions; not an apples-to-apples superiority test. Open trades remain marked."
+}

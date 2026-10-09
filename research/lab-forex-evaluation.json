@@ -1,0 +1,975 @@
+{
+  "market": "forex",
+  "symbol": "EUR_USD",
+  "rows": 3162,
+  "test_start": "2026-08-03T08:00:00+00:00",
+  "test_end": "2026-09-25T20:00:00+00:00",
+  "selection_rule": "Ten declared candidates. Each of two training validation folds must have >=15 closed trades, positive net P/L and PF>=1.1; combined stressed validation must profit. Rank by worst-fold net return, then total net P/L. Otherwise cash.",
+  "selection_data_end": "2026-08-03T07:00:00+00:00",
+  "validation_edges": [
+    948,
+    1581,
+    2213
+  ],
+  "candidates": [
+    {
+      "parameters": {
+        "family": "band_recovery",
+        "threshold": 35,
+        "stop_fraction": 0.005,
+        "reward_risk": 2
+      },
+      "validation_folds": [
+        {
+          "closed_trades": 0,
+          "wins": 0,
+          "losses": 0,
+          "breakeven": 0,
+          "win_rate_pct": null,
+          "win_loss_ratio": null,
+          "profit_factor": null,
+          "net_pnl": 0,
+          "sample_win_rate_95pct_interval": null,
+          "evidence": "insufficient_sample",
+          "ending_equity": 10000,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 0,
+          "halted_reason": null
+        },
+        {
+          "closed_trades": 0,
+          "wins": 0,
+          "losses": 0,
+          "breakeven": 0,
+          "win_rate_pct": null,
+          "win_loss_ratio": null,
+          "profit_factor": null,
+          "net_pnl": 0,
+          "sample_win_rate_95pct_interval": null,
+          "evidence": "insufficient_sample",
+          "ending_equity": 10000,
+          "return_pct": 0.0,
+          "max_drawdown_pct": 0,
+          "halted_reason": null
+        }
+      ],
+      "cost_stress": {
+        "closed_trades": 0,
+        "wins": 0,
+        "losses": 0,
+        "breakeven": 0,
+        "win_rate_pct": null,
+        "win_loss_ratio": null,
+        "profit_factor": null,
+        "net_pnl": 0,
+        "sample_win_rate_95pct_interval": null,
+        "evidence": "insufficient_sample",
+        "ending_equity": 10000,
+        "return_pct": 0.0,
+        "max_drawdown_pct": 0,
+        "halted_reason": null
+      }
+    },
+    {
+      "parameters": {
+        "family": "band_recovery",
+        "threshold": 45,
+        "stop_fraction": 0.005,
+        "reward_risk": 2
+      },
+      "validation_folds": [
+        {
+          "closed_trades": 3,
+          "wins": 2,
+          "losses": 1,
+          "breakeven": 0,
+          "win_rate_pct": 66.67,
+          "win_loss_ratio": 2.0,
+          "profit_factor": 0.508,
+          "net_pnl": -4.9724,
+          "sample_win_rate_95pct_interval": [
+            20.77,
+            93.85
+          ],
+          "evidence": "insufficient_sample",
+          "ending_equity": 9995.0276,
+          "return_pct": -0.0497,
+          "max_drawdown_pct": 0.1019,
+          "halted_reason": null
+        },
+        {
+          "closed_trades": 7,
+          "wins": 4,
+          "losses": 3,
+          "breakeven": 0,
+          "win_rate_pct": 57.14,
+          "win_loss_ratio": 1.333,
+          "profit_factor": 0.608,
+          "net_pnl": -4.9492,
+          "sample_win_rate_95pct_interval": [
+            25.05,
+            84.18
+          ],
+          "evidence": "insufficient_sample",
+          "ending_equity": 9995.0508,
+          "return_pct": -0.0495,
+          "max_drawdown_pct": 0.1528,
+          "halted_reason": null
+        }
+      ],
+      "cost_stress": {
+        "closed_trades": 10,
+        "wins": 6,
+        "losses": 4,
+        "breakeven": 0,
+        "win_rate_pct": 60.0,
+        "win_loss_ratio": 1.5,
+        "profit_factor": 0.348,
+        "net_pnl": -16.1114,
+        "sample_win_rate_95pct_interval": [
+          31.27,
+          83.18
+        ],
+        "evidence": "insufficient_sample",
+        "ending_equity": 9983.8886,
+        "return_pct": -0.1611,
+        "max_drawdown_pct": 0.23,
+        "halted_reason": null
+      }
+    },
+    {
+      "parameters": {
+        "family": "range_reversion",
+        "threshold": 35,
+        "stop_fraction": 0.005,
+        "reward_risk": 2
+      },
+      "validation_folds": [
+        {
+          "closed_trades": 9,
+          "wins": 9,
+          "losses": 0,
+          "breakeven": 0,
+          "win_rate_pct": 100.0,
+          "win_loss_ratio": null,
+          "profit_factor": null,
+          "net_pnl": 29.1404,
+          "sample_win_rate_95pct_interval": [
+            70.08,
+            100.0
+          ],
+          "evidence": "insufficient_sample",
+          "ending_equity": 10029.1404,
+          "return_pct": 0.2914,
+          "max_drawdown_pct": 0.0452,
+          "halted_reason": null
+        },
+        {
+          "closed_trades": 10,
+          "wins": 7,
+          "losses": 3,
+          "breakeven": 0,
+          "win_rate_pct": 70.0,
+          "win_loss_ratio": 2.333,
+          "profit_factor": 9.247,
+          "net_pnl": 21.8598,
+          "sample_win_rate_95pct_interval": [
+            39.68,
+            89.22
+          ],
+          "evidence": "insufficient_sample",
+          "ending_equity": 10021.8598,
+          "return_pct": 0.2186,
+          "max_drawdown_pct": 0.0501,
+          "halted_reason": null
+        }
+      ],
+      "cost_stress": {
+        "closed_trades": 19,
+        "wins": 15,
+        "losses": 4,
+        "breakeven": 0,
+        "win_rate_pct": 78.95,
+        "win_loss_ratio": 3.75,
+        "profit_factor": 8.689,
+        "net_pnl": 37.7188,
+        "sample_win_rate_95pct_interval": [
+          56.67,
+          91.49
+        ],
+        "evidence": "insufficient_sample",
+        "ending_equity": 10037.7188,
+        "return_pct": 0.3772,
+        "max_drawdown_pct": 0.0623,
+        "halted_reason": null
+      }
+    },
+    {
+      "parameters": {
+        "family": "range_reversion",
+        "threshold": 45,
+        "stop_fraction": 0.005,
+        "reward_risk": 2
+      },
+      "validation_folds": [
+        {
+          "closed_trades": 24,
+          "wins": 20,
+          "losses": 4,
+          "breakeven": 0,
+          "win_rate_pct": 83.33,
+          "win_loss_ratio": 5.0,
+          "profit_factor": 1.853,
+          "net_pnl": 20.8115,
+          "sample_win_rate_95pct_interval": [
+            64.15,
+            93.32
+          ],
+          "evidence": "insufficient_sample",
+          "ending_equity": 10020.8115,
+          "return_pct": 0.2081,
+          "max_drawdown_pct": 0.2464,
+          "halted_reason": null
+        },
+        {
+          "closed_trades": 22,
+          "wins": 14,
+          "losses": 8,
+          "breakeven": 0,
+          "win_rate_pct": 63.64,
+          "win_loss_ratio": 1.75,
+          "profit_factor": 1.073,
+          "net_pnl": 1.9291,
+          "sample_win_rate_95pct_interval": [
+            42.95,
+            80.27
+          ],
+          "evidence": "insufficient_sample",
+          "ending_equity": 10001.9291,
+          "return_pct": 0.0193,
+          "max_drawdown_pct": 0.2208,
+          "halted_reason": null
+        }
+      ],
+      "cost_stress": {
+        "closed_trades": 46,
+        "wins": 28,
+        "losses": 18,
+        "breakeven": 0,
+        "win_rate_pct": 60.87,
+        "win_loss_ratio": 1.556,
+        "profit_factor": 0.868,
+        "net_pnl": -7.8581,
+        "sample_win_rate_95pct_interval": [
+          46.46,
+          73.61
+        ],
+        "evidence": "insufficient_sample",
+        "ending_equity": 9992.1419,
+        "return_pct": -0.0786,
+        "max_drawdown_pct": 0.357,
+        "halted_reason": null
+      }
+    },
+    {
+      "parameters": {
+        "family": "macd_swing",
+        "threshold": 40,
+        "stop_fraction": 0.0025,
+        "reward_risk": 2
+      },
+      "validation_folds": [
+        {
+          "closed_trades": 26,
+          "wins": 6,
+          "losses": 20,
+          "breakeven": 0,
+          "win_rate_pct": 23.08,
+          "win_loss_ratio": 0.3,
+          "profit_factor": 0.514,
+          "net_pnl": -20.5165,
+          "sample_win_rate_95pct_interval": [
+            11.03,
+            42.05
+          ],
+          "evidence": "insufficient_sample",
+          "ending_equity": 9979.4835,
+          "return_pct": -0.2052,
+          "max_drawdown_pct": 0.2949,
+          "halted_reason": null
+        },
+        {
+          "closed_trades": 25,
+          "wins": 7,
+          "losses": 18,
+          "breakeven": 0,
+          "win_rate_pct": 28.0,
+          "win_loss_ratio": 0.389,
+          "profit_factor": 0.585,
+          "net_pnl": -16.7306,
+          "sample_win_rate_95pct_interval": [
+            14.28,
+            47.58
+          ],
+          "evidence": "insufficient_sample",
+          "ending_equity": 9983.2694,
+          "return_pct": -0.1673,
+          "max_drawdown_pct": 0.2544,
+          "halted_reason": null
+        }
+      ],
+      "cost_stress": {
+        "closed_trades": 51,
+        "wins": 10,
+        "losses": 41,
+        "breakeven": 0,
+        "win_rate_pct": 19.61,
+        "win_loss_ratio": 0.244,
+        "profit_factor": 0.327,
+        "net_pnl": -72.9787,
+        "sample_win_rate_95pct_interval": [
+          11.02,
+          32.46
+        ],
+        "evidence": "insufficient_sample",
+        "ending_equity": 9927.0213,
+        "return_pct": -0.7298,
+        "max_drawdown_pct": 0.8238,
+        "halted_reason": null
+      }
+    },
+    {
+      "parameters": {
+        "family": "macd_swing",
+        "threshold": 40,
+        "stop_fraction": 0.005,
+        "reward_risk": 2
+      },
+      "validation_folds": [
+        {
+          "closed_trades": 26,
+          "wins": 6,
+          "losses": 20,
+          "breakeven": 0,
+          "win_rate_pct": 23.08,
+          "win_loss_ratio": 0.3,
+          "profit_factor": 0.442,
+          "net_pnl": -23.3044,
+          "sample_win_rate_95pct_interval": [
+            11.03,
+            42.05
+          ],
+          "evidence": "insufficient_sample",
+          "ending_equity": 9976.6956,
+          "return_pct": -0.233,
+          "max_drawdown_pct": 0.3234,
+          "halted_reason": null
+        },
+        {
+          "closed_trades": 25,
+          "wins": 7,
+          "losses": 18,
+          "breakeven": 0,
+          "win_rate_pct": 28.0,
+          "win_loss_ratio": 0.389,
+          "profit_factor": 0.471,
+          "net_pnl": -23.9777,
+          "sample_win_rate_95pct_interval": [
+            14.28,
+            47.58
+          ],
+          "evidence": "insufficient_sample",
+          "ending_equity": 9976.0223,
+          "return_pct": -0.2398,
+          "max_drawdown_pct": 0.3042,
+          "halted_reason": null
+        }
+      ],
+      "cost_stress": {
+        "closed_trades": 51,
+        "wins": 10,
+        "losses": 41,
+        "breakeven": 0,
+        "win_rate_pct": 19.61,
+        "win_loss_ratio": 0.244,
+        "profit_factor": 0.279,
+        "net_pnl": -82.3082,
+        "sample_win_rate_95pct_interval": [
+          11.02,
+          32.46
+        ],
+        "evidence": "insufficient_sample",
+        "ending_equity": 9917.6918,
+        "return_pct": -0.8231,
+        "max_drawdown_pct": 0.917,
+        "halted_reason": null
+      }
+    },
+    {
+      "parameters": {
+        "family": "trend",
+        "threshold": 10,
+        "stop_fraction": 0.005,
+        "reward_risk": 2
+      },
+      "validation_folds": [
+        {
+          "closed_trades": 29,
+          "wins": 4,
+          "losses": 25,
+          "breakeven": 0,
+          "win_rate_pct": 13.79,
+          "win_loss_ratio": 0.16,
+          "profit_factor": 0.337,
+          "net_pnl": -68.1758,
+          "sample_win_rate_95pct_interval": [
+            5.5,
+            30.56
+          ],
+          "evidence": "insufficient_sample",
+          "ending_equity": 9931.8242,
+          "return_pct": -0.6818,
+          "max_drawdown_pct": 0.8876,
+          "halted_reason": null
+        },
+        {
+          "closed_trades": 31,
+          "wins": 5,
+          "losses": 26,
+          "breakeven": 0,
+          "win_rate_pct": 16.13,
+          "win_loss_ratio": 0.192,
+          "profit_factor": 0.115,
+          "net_pnl": -95.35,
+          "sample_win_rate_95pct_interval": [
+            7.09,
+            32.63
+          ],
+          "evidence": "insufficient_sample",
+          "ending_equity": 9904.65,
+          "return_pct": -0.9535,
+          "max_drawdown_pct": 1.0388,
+          "halted_reason": null
+        }
+      ],
+      "cost_stress": {
+        "closed_trades": 60,
+        "wins": 5,
+        "losses": 55,
+        "breakeven": 0,
+        "win_rate_pct": 8.33,
+        "win_loss_ratio": 0.091,
+        "profit_factor": 0.171,
+        "net_pnl": -202.5195,
+        "sample_win_rate_95pct_interval": [
+          3.61,
+          18.07
+        ],
+        "evidence": "insufficient_sample",
+        "ending_equity": 9797.4805,
+        "return_pct": -2.0252,
+        "max_drawdown_pct": 2.0254,
+        "halted_reason": null
+      }
+    },
+    {
+      "parameters": {
+        "family": "rsi_pullback",
+        "threshold": 40,
+        "stop_fraction": 0.005,
+        "reward_risk": 2
+      },
+      "validation_folds": [
+        {
+          "closed_trades": 6,
+          "wins": 3,
+          "losses": 3,
+          "breakeven": 0,
+          "win_rate_pct": 50.0,
+          "win_loss_ratio": 1.0,
+          "profit_factor": 0.948,
+          "net_pnl": -0.2667,
+          "sample_win_rate_95pct_interval": [
+            18.76,
+            81.24
+          ],
+          "evidence": "insufficient_sample",
+          "ending_equity": 9999.7333,
+          "return_pct": -0.0027,
+          "max_drawdown_pct": 0.0685,
+          "halted_reason": null
+        },
+        {
+          "closed_trades": 9,
+          "wins": 2,
+          "losses": 7,
+          "breakeven": 0,
+          "win_rate_pct": 22.22,
+          "win_loss_ratio": 0.286,
+          "profit_factor": 1.067,
+          "net_pnl": 0.855,
+          "sample_win_rate_95pct_interval": [
+            6.32,
+            54.74
+          ],
+          "evidence": "insufficient_sample",
+          "ending_equity": 10000.855,
+          "return_pct": 0.0085,
+          "max_drawdown_pct": 0.125,
+          "halted_reason": null
+        }
+      ],
+      "cost_stress": {
+        "closed_trades": 14,
+        "wins": 3,
+        "losses": 11,
+        "breakeven": 0,
+        "win_rate_pct": 21.43,
+        "win_loss_ratio": 0.273,
+        "profit_factor": 0.494,
+        "net_pnl": -13.0803,
+        "sample_win_rate_95pct_interval": [
+          7.57,
+          47.59
+        ],
+        "evidence": "insufficient_sample",
+        "ending_equity": 9986.9197,
+        "return_pct": -0.1308,
+        "max_drawdown_pct": 0.2522,
+        "halted_reason": null
+      }
+    },
+    {
+      "parameters": {
+        "family": "rsi2_reversion",
+        "threshold": 10,
+        "stop_fraction": 0.005,
+        "reward_risk": 2
+      },
+      "validation_folds": [
+        {
+          "closed_trades": 24,
+          "wins": 12,
+          "losses": 12,
+          "breakeven": 0,
+          "win_rate_pct": 50.0,
+          "win_loss_ratio": 1.0,
+          "profit_factor": 2.307,
+          "net_pnl": 9.8323,
+          "sample_win_rate_95pct_interval": [
+            31.43,
+            68.57
+          ],
+          "evidence": "insufficient_sample",
+          "ending_equity": 10009.8323,
+          "return_pct": 0.0983,
+          "max_drawdown_pct": 0.0704,
+          "halted_reason": null
+        },
+        {
+          "closed_trades": 30,
+          "wins": 12,
+          "losses": 18,
+          "breakeven": 0,
+          "win_rate_pct": 40.0,
+          "win_loss_ratio": 0.667,
+          "profit_factor": 0.469,
+          "net_pnl": -13.0569,
+          "sample_win_rate_95pct_interval": [
+            24.59,
+            57.68
+          ],
+          "evidence": "insufficient_sample",
+          "ending_equity": 9986.9431,
+          "return_pct": -0.1306,
+          "max_drawdown_pct": 0.1932,
+          "halted_reason": null
+        }
+      ],
+      "cost_stress": {
+        "closed_trades": 54,
+        "wins": 14,
+        "losses": 40,
+        "breakeven": 0,
+        "win_rate_pct": 25.93,
+        "win_loss_ratio": 0.35,
+        "profit_factor": 0.272,
+        "net_pnl": -40.9491,
+        "sample_win_rate_95pct_interval": [
+          16.12,
+          38.93
+        ],
+        "evidence": "insufficient_sample",
+        "ending_equity": 9959.0509,
+        "return_pct": -0.4095,
+        "max_drawdown_pct": 0.4669,
+        "halted_reason": null
+      }
+    },
+    {
+      "parameters": {
+        "family": "donchian",
+        "threshold": 10,
+        "stop_fraction": 0.005,
+        "reward_risk": 2
+      },
+      "validation_folds": [
+        {
+          "closed_trades": 16,
+          "wins": 3,
+          "losses": 13,
+          "breakeven": 0,
+          "win_rate_pct": 18.75,
+          "win_loss_ratio": 0.231,
+          "profit_factor": 0.655,
+          "net_pnl": -17.4124,
+          "sample_win_rate_95pct_interval": [
+            6.59,
+            43.01
+          ],
+          "evidence": "insufficient_sample",
+          "ending_equity": 9982.5876,
+          "return_pct": -0.1741,
+          "max_drawdown_pct": 0.4859,
+          "halted_reason": null
+        },
+        {
+          "closed_trades": 26,
+          "wins": 4,
+          "losses": 22,
+          "breakeven": 0,
+          "win_rate_pct": 15.38,
+          "win_loss_ratio": 0.182,
+          "profit_factor": 0.031,
+          "net_pnl": -82.3236,
+          "sample_win_rate_95pct_interval": [
+            6.15,
+            33.53
+          ],
+          "evidence": "insufficient_sample",
+          "ending_equity": 9917.6764,
+          "return_pct": -0.8232,
+          "max_drawdown_pct": 0.8638,
+          "halted_reason": null
+        }
+      ],
+      "cost_stress": {
+        "closed_trades": 42,
+        "wins": 5,
+        "losses": 37,
+        "breakeven": 0,
+        "win_rate_pct": 11.9,
+        "win_loss_ratio": 0.135,
+        "profit_factor": 0.202,
+        "net_pnl": -128.4896,
+        "sample_win_rate_95pct_interval": [
+          5.19,
+          25.0
+        ],
+        "evidence": "insufficient_sample",
+        "ending_equity": 9871.5104,
+        "return_pct": -1.2849,
+        "max_drawdown_pct": 1.2933,
+        "halted_reason": null
+      }
+    }
+  ],
+  "selected_parameters": null,
+  "cash_fallback": true,
+  "cash_return_pct": 0,
+  "baseline": {
+    "closed_trades": 28,
+    "wins": 11,
+    "losses": 17,
+    "breakeven": 0,
+    "win_rate_pct": 39.29,
+    "win_loss_ratio": 0.647,
+    "profit_factor": 1.645,
+    "net_pnl": 28.0983,
+    "sample_win_rate_95pct_interval": [
+      23.57,
+      57.59
+    ],
+    "evidence": "insufficient_sample",
+    "ending_equity": 10028.0983,
+    "return_pct": 0.281,
+    "max_drawdown_pct": 0.1927,
+    "halted_reason": null
+  },
+  "fixed_later_comparisons": [
+    {
+      "parameters": {
+        "family": "band_recovery",
+        "threshold": 35,
+        "stop_fraction": 0.005,
+        "reward_risk": 2
+      },
+      "later_period": {
+        "closed_trades": 2,
+        "wins": 2,
+        "losses": 0,
+        "breakeven": 0,
+        "win_rate_pct": 100.0,
+        "win_loss_ratio": null,
+        "profit_factor": null,
+        "net_pnl": 1.9955,
+        "sample_win_rate_95pct_interval": [
+          34.24,
+          100.0
+        ],
+        "evidence": "insufficient_sample",
+        "ending_equity": 10001.9955,
+        "return_pct": 0.02,
+        "max_drawdown_pct": 0.0147,
+        "halted_reason": null
+      }
+    },
+    {
+      "parameters": {
+        "family": "band_recovery",
+        "threshold": 45,
+        "stop_fraction": 0.005,
+        "reward_risk": 2
+      },
+      "later_period": {
+        "closed_trades": 8,
+        "wins": 2,
+        "losses": 6,
+        "breakeven": 0,
+        "win_rate_pct": 25.0,
+        "win_loss_ratio": 0.333,
+        "profit_factor": 0.332,
+        "net_pnl": -6.151,
+        "sample_win_rate_95pct_interval": [
+          7.15,
+          59.07
+        ],
+        "evidence": "insufficient_sample",
+        "ending_equity": 9993.849,
+        "return_pct": -0.0615,
+        "max_drawdown_pct": 0.0921,
+        "halted_reason": null
+      }
+    },
+    {
+      "parameters": {
+        "family": "range_reversion",
+        "threshold": 35,
+        "stop_fraction": 0.005,
+        "reward_risk": 2
+      },
+      "later_period": {
+        "closed_trades": 10,
+        "wins": 6,
+        "losses": 4,
+        "breakeven": 0,
+        "win_rate_pct": 60.0,
+        "win_loss_ratio": 1.5,
+        "profit_factor": 0.349,
+        "net_pnl": -20.5782,
+        "sample_win_rate_95pct_interval": [
+          31.27,
+          83.18
+        ],
+        "evidence": "insufficient_sample",
+        "ending_equity": 9979.4218,
+        "return_pct": -0.2058,
+        "max_drawdown_pct": 0.2145,
+        "halted_reason": null
+      }
+    },
+    {
+      "parameters": {
+        "family": "range_reversion",
+        "threshold": 45,
+        "stop_fraction": 0.005,
+        "reward_risk": 2
+      },
+      "later_period": {
+        "closed_trades": 24,
+        "wins": 13,
+        "losses": 11,
+        "breakeven": 0,
+        "win_rate_pct": 54.17,
+        "win_loss_ratio": 1.182,
+        "profit_factor": 0.435,
+        "net_pnl": -29.0822,
+        "sample_win_rate_95pct_interval": [
+          35.07,
+          72.11
+        ],
+        "evidence": "insufficient_sample",
+        "ending_equity": 9970.9178,
+        "return_pct": -0.2908,
+        "max_drawdown_pct": 0.3146,
+        "halted_reason": null
+      }
+    },
+    {
+      "parameters": {
+        "family": "macd_swing",
+        "threshold": 40,
+        "stop_fraction": 0.0025,
+        "reward_risk": 2
+      },
+      "later_period": {
+        "closed_trades": 33,
+        "wins": 11,
+        "losses": 22,
+        "breakeven": 0,
+        "win_rate_pct": 33.33,
+        "win_loss_ratio": 0.5,
+        "profit_factor": 1.658,
+        "net_pnl": 26.528,
+        "sample_win_rate_95pct_interval": [
+          19.75,
+          50.39
+        ],
+        "evidence": "insufficient_sample",
+        "ending_equity": 10026.528,
+        "return_pct": 0.2653,
+        "max_drawdown_pct": 0.15,
+        "halted_reason": null
+      }
+    },
+    {
+      "parameters": {
+        "family": "macd_swing",
+        "threshold": 40,
+        "stop_fraction": 0.005,
+        "reward_risk": 2
+      },
+      "later_period": {
+        "closed_trades": 33,
+        "wins": 11,
+        "losses": 22,
+        "breakeven": 0,
+        "win_rate_pct": 33.33,
+        "win_loss_ratio": 0.5,
+        "profit_factor": 1.542,
+        "net_pnl": 21.8659,
+        "sample_win_rate_95pct_interval": [
+          19.75,
+          50.39
+        ],
+        "evidence": "insufficient_sample",
+        "ending_equity": 10021.8659,
+        "return_pct": 0.2187,
+        "max_drawdown_pct": 0.15,
+        "halted_reason": null
+      }
+    },
+    {
+      "parameters": {
+        "family": "trend",
+        "threshold": 10,
+        "stop_fraction": 0.005,
+        "reward_risk": 2
+      },
+      "later_period": {
+        "closed_trades": 28,
+        "wins": 11,
+        "losses": 17,
+        "breakeven": 0,
+        "win_rate_pct": 39.29,
+        "win_loss_ratio": 0.647,
+        "profit_factor": 1.645,
+        "net_pnl": 28.0983,
+        "sample_win_rate_95pct_interval": [
+          23.57,
+          57.59
+        ],
+        "evidence": "insufficient_sample",
+        "ending_equity": 10028.0983,
+        "return_pct": 0.281,
+        "max_drawdown_pct": 0.1927,
+        "halted_reason": null
+      }
+    },
+    {
+      "parameters": {
+        "family": "rsi_pullback",
+        "threshold": 40,
+        "stop_fraction": 0.005,
+        "reward_risk": 2
+      },
+      "later_period": {
+        "closed_trades": 5,
+        "wins": 4,
+        "losses": 1,
+        "breakeven": 0,
+        "win_rate_pct": 80.0,
+        "win_loss_ratio": 4.0,
+        "profit_factor": 74.692,
+        "net_pnl": 16.1694,
+        "sample_win_rate_95pct_interval": [
+          37.55,
+          96.38
+        ],
+        "evidence": "insufficient_sample",
+        "ending_equity": 10016.1694,
+        "return_pct": 0.1617,
+        "max_drawdown_pct": 0.0308,
+        "halted_reason": null
+      }
+    },
+    {
+      "parameters": {
+        "family": "rsi2_reversion",
+        "threshold": 10,
+        "stop_fraction": 0.005,
+        "reward_risk": 2
+      },
+      "later_period": {
+        "closed_trades": 39,
+        "wins": 20,
+        "losses": 19,
+        "breakeven": 0,
+        "win_rate_pct": 51.28,
+        "win_loss_ratio": 1.053,
+        "profit_factor": 1.215,
+        "net_pnl": 2.9083,
+        "sample_win_rate_95pct_interval": [
+          36.2,
+          66.14
+        ],
+        "evidence": "insufficient_sample",
+        "ending_equity": 10002.9083,
+        "return_pct": 0.0291,
+        "max_drawdown_pct": 0.0735,
+        "halted_reason": null
+      }
+    },
+    {
+      "parameters": {
+        "family": "donchian",
+        "threshold": 10,
+        "stop_fraction": 0.005,
+        "reward_risk": 2
+      },
+      "later_period": {
+        "closed_trades": 20,
+        "wins": 7,
+        "losses": 13,
+        "breakeven": 0,
+        "win_rate_pct": 35.0,
+        "win_loss_ratio": 0.538,
+        "profit_factor": 1.212,
+        "net_pnl": 7.2129,
+        "sample_win_rate_95pct_interval": [
+          18.12,
+          56.71
+        ],
+        "evidence": "insufficient_sample",
+        "ending_equity": 10007.2129,
+        "return_pct": 0.0721,
+        "max_drawdown_pct": 0.2751,
+        "halted_reason": null
+      }
+    }
+  ],
+  "auto_promotion": false,
+  "verified_70_percent": false,
+  "limitations": "Exploratory historical evaluation; 2026 BTC/ETH/EURUSD periods already examined in earlier searches. Older downloaded 2025 data expands validation, not proof of future performance. Strategies are independently implemented approximations, not a run of Freqtrade or LEAN. Stock sample old/unadjusted; swaps, depth, partial fills and dividends absent. No future win probability.",
+  "input_sha256": "72ed2b3dba3a2b5fc500cf802a6c3f6dce0eea69629a39965edbea72719a4957"
+}

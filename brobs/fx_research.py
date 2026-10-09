@@ -31,6 +31,7 @@ def replay(rows, start, config=None, spread=.00015, mode='multi_agent', signal_f
         raise ValueError('Invalid start or spread')
     with closing(sqlite3.connect(':memory:')) as connection:
         class ReplayBook(book_class):
+            history_limit=0 # UI history is not needed inside each replay tick.
             @contextmanager
             def connect(self):
                 with connection:
