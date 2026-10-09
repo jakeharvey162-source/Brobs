@@ -23,7 +23,7 @@ Use normal candles. Heikin Ashi, Renko and other synthetic bars can give unreali
 ## 3. Install the strategy
 
 1. Open **Pine Editor** (its position may vary with TradingView's layout).
-2. Choose **Create new → New strategy**.
+2. Choose **Open → Templates → New strategy** (some layouts show Create new).
 3. Select all template code and replace it with the copied BROBS script.
 4. Save it as **BROBS**.
 5. Click **Add to chart**. The displayed strategy name is **BROBS Multi-Market Paper**.
@@ -83,3 +83,17 @@ Official references:
 - https://www.tradingview.com/support/solutions/43000481368-strategy-alerts/
 - https://www.tradingview.com/pine-script-docs/concepts/alerts/
 - https://www.tradingview.com/support/solutions/43000529348-how-to-configure-webhook-alerts/
+
+## A $10 paper account
+
+In strategy **Settings → Properties**, change Initial capital to 10. This does not deposit money or connect a broker. On BTCUSDT/ETHUSDT the balance is 10 USDT. Keep costs enabled and risk/notional limits unchanged. At the default 20% notional cap, the entry budget starts at about 2 quote-currency units; whole-share stock entries will usually round to zero. The chart status now explains this minimum-quantity block. RSI2 thresholds up to 49 are accepted, including the Python lab's 35 profile. These changes have not been compiled inside TradingView here.
+
+The Python crypto runner now also accepts custom paper capital:
+
+```bash
+python -m brobs.market_runner --market crypto --capital 10 --db brobs_crypto_10.db --once
+```
+
+This polls public data but simulates fills locally. Repeat the same capital setting when reopening that database; use a new database for a different starting balance. Add `--demo` for synthetic data rather than public quotes. For forex, the existing `brobs.fx_runner --capital 10` requires OANDA practice credentials unless `--demo` is used. Small-unit paper fills do not establish the minimum trade size accepted by a real venue.
+
+BROBS has no verified future win probability or intraday profit forecast. Its real-money execution remains disabled; a $10 simulation cannot earn real cash by tonight. Testing a historical period at $10 is useful for checking sizing, not forecasting today's return.

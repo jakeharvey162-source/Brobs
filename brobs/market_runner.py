@@ -68,6 +68,7 @@ def main():
     p.add_argument('--grok-review',help='Optional review JSON; missing/invalid review blocks entries')
     p.add_argument('--grok-request',help='Export current proposed entry evidence JSON (one symbol)')
     p.add_argument('--stop',type=float);p.add_argument('--reward-risk',type=float,default=2)
+    p.add_argument('--capital',type=float,default=10000,help='Initial paper balance in the market quote currency; use a new database when changing capital')
     p.add_argument('--threshold',type=float);p.add_argument('--evidence-report',help='Optional local lab report; unaccepted/mismatched research blocks entry')
     p.add_argument('--cooldown-seconds',type=int);p.add_argument('--loss-streak-limit',type=int);p.add_argument('--loss-window-seconds',type=int)
     a=p.parse_args()
@@ -77,7 +78,7 @@ def main():
         from .app import open_book
         book=open_book(a.db or f'brobs_{a.market}.db',a.market);book.pause(a.pause);print(json.dumps({'paused':a.pause}));return
     cfg=default_config(a.market)
-    book=BOOKS[a.market](a.db or f'brobs_{a.market}.db',replace(cfg,stop_fraction=a.stop if a.stop is not None else cfg.stop_fraction,reward_risk=a.reward_risk))
+    book=BOOKS[a.market](a.db or f'brobs_{a.market}.db',replace(cfg,capital=a.capital,stop_fraction=a.stop if a.stop is not None else cfg.stop_fraction,reward_risk=a.reward_risk))
     if any(v is not None for v in (a.cooldown_seconds,a.loss_streak_limit,a.loss_window_seconds)):
         from .protections import EntryProtection
         from dataclasses import asdict

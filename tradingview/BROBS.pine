@@ -10,7 +10,7 @@ autoStop = input.bool(true, "Use market default stop (forex 0.5%, stocks/crypto 
 manualStop = input.float(2.0, "Custom stop (%)", minval=0.1, maxval=10.0) / 100
 rewardRisk = input.float(2.0, "Target / stop", minval=1.0, maxval=5.0)
 notionalFraction = input.float(20.0, "Maximum notional / equity (%)", minval=1.0, maxval=25.0) / 100
-rsi2Threshold = input.float(10.0, "RSI2 entry threshold", minval=1.0, maxval=30.0)
+rsi2Threshold = input.float(10.0, "RSI2 entry threshold", minval=1.0, maxval=49.0)
 rsi14Threshold = input.float(40.0, "RSI14 pullback threshold", minval=20.0, maxval=45.0)
 startDate = input.time(timestamp("01 Jan 2026 00:00 +0000"), "Start date")
 endDate = input.time(timestamp("01 Jan 2030 00:00 +0000"), "End date")
@@ -89,7 +89,8 @@ plot(slow, "Slow 21", color=color.orange)
 plot(family == "Trend momentum" ? na : regime, "Regime 100", color=color.gray)
 plotshape(supported and inWindow and barstate.isconfirmed and longSignal, title="Buy setup (not a fill)", style=shape.triangleup, location=location.belowbar, color=color.lime, size=size.tiny)
 plotshape(supported and inWindow and barstate.isconfirmed and shortSignal, title="Sell / exit setup (not a fill)", style=shape.triangledown, location=location.abovebar, color=color.red, size=size.tiny)
-var table info = table.new(position.top_right, 1, 2)
+var table info = table.new(position.top_right, 1, 3)
 if barstate.islast
     table.cell(info, 0, 0, supported ? "BROBS PAPER | " + syminfo.currency + " | " + family : "Use USD forex/stocks or USD/USDT crypto", text_color=supported ? color.white : color.orange, bgcolor=color.black)
     table.cell(info, 0, 1, "No verified 70-80% win rate. Each chart is a separate simulation.", text_color=color.white, bgcolor=color.black)
+    table.cell(info, 0, 2, supported and ready and quantity <= 0 ? "Entry blocked: capital/risk limits below minimum quantity" : "Paper equity: " + str.tostring(strategy.equity, "#.##") + " " + syminfo.currency, text_color=quantity <= 0 ? color.orange : color.white, bgcolor=color.black)

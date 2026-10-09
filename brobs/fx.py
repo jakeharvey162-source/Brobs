@@ -234,7 +234,9 @@ class FXBook:
                 per_unit_risk = entry*(self.config.stop_fraction+2*self.config.commission_fraction+self.config.slippage_fraction)
                 units = self.quantize_units(min(nav*self.config.risk_fraction/per_unit_risk,
                     nav*self.config.max_notional_fraction/entry, max(0, values['free_margin'])/(entry*(1+self.config.commission_fraction))))
-                if units <= 0: continue
+                if units <= 0:
+                    entry_vetoes.append(dict(symbol=symbol,reason='insufficient_units',detail='Risk/notional/cash limits produce less than the minimum paper quantity'))
+                    continue
                 fee = units*entry*self.config.commission_fraction
                 position = dict(units=sign*units, entry=entry, entry_fee=fee,
                     stop=entry*(1-sign*self.config.stop_fraction),
