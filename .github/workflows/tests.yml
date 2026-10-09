@@ -36,3 +36,5 @@ jobs:
       - run: diff research/stock-strategy-evaluation.json /tmp/stock-evaluation.json
       - run: python -m brobs.strategy_lab --csv research/data/EURUSD_1h.csv --market forex --symbol EUR_USD --output /tmp/lab-forex-evaluation.json
       - run: diff research/lab-forex-evaluation.json /tmp/lab-forex-evaluation.json
+      - run: python -m brobs.winrate_lab --csv research/data/EURUSD_1h.csv --market forex --symbol EUR_USD --output /tmp/winrate-forex-evaluation.json
+      - run: diff research/winrate-forex-evaluation.json /tmp/winrate-forex-evaluation.json

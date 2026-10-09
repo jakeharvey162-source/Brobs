@@ -89,3 +89,6 @@ Thirty additional candidate evaluations did not establish a reliable 70–80% st
 ### Strategy lab and stronger paper controls
 
 [Comparison, results and setup](docs/PRO_COMPARISON.md): ten-config chronological research, cost-aware band/MACD families, optional evidence-gated entries, durable cooldown/loss-streak guards, forex stop recovery during history failures, and persisted expectancy/equity monitoring. Tested against longer BTC history and existing ETH/EURUSD samples. No candidate met all selection gates; no verified 70% claim or automatic promotion.
+# Latest video review and win-rate experiment
+
+See [the video review](docs/VIDEO_REVIEW.md) for the checked public Grok desk, skeptical entry review, and the reproducible 16-profile RSI2 experiment. Reports explicitly distinguish observed historical wins from an unverified future probability.
