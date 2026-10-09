@@ -4,6 +4,8 @@ Forex research and autonomous **local paper trading**. Real-money execution is d
 
 See [execution status and engine comparison](docs/EXECUTION_STATUS.md) for the separately tested OANDA practice-entry gateway, broker protection confirmation, remaining automation gaps and exactly which public projects were used. This gateway is not yet connected to the polling runner or dashboard.
 
+The new [Freqtrade/HyperGrok integration report](docs/REPO_INTEGRATION.md) covers the complete pinned upstream submodules, optional Freqtrade strategy adapter, attributed HyperGrok risk role and actual offline engine backtests. The optional Freqtrade engine has its own account/reporting; it is not connected to this dashboard.
+
 The app polls OANDA's practice-data API, evaluates trend/momentum/volatility votes, simulates trades locally and persists positions, trades and decisions in SQLite. It does **not** submit orders to OANDA, and its local paper balance is separate from the broker account balance.
 
 ## Run now — no account required for a labeled demo

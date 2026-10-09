@@ -1,0 +1,30 @@
+{
+  "total_trades": 0,
+  "wins": 0,
+  "draws": 0,
+  "losses": 0,
+  "winrate": 0,
+  "profit_total": 0.0,
+  "profit_total_abs": 0,
+  "profit_factor": 0.0,
+  "max_drawdown_account": 0.0,
+  "starting_balance": 10.0,
+  "final_balance": 10.0,
+  "backtest_start": "2026-03-23 00:00:00",
+  "backtest_end": "2026-09-30 23:00:00",
+  "trades": [],
+  "brobs_assumptions": {
+    "engine": "Freqtrade 2026.9",
+    "capital": 10.0,
+    "fee_per_fill": 0.001,
+    "metadata": "Synthetic spot constraints: 5 USDT minimum cost, 0.000001 unit step, 0.01 price tick; not verified current Binance rules",
+    "live_exchange_tested": false,
+    "hypergrok_runtime_tested": false,
+    "future_win_probability": null,
+    "limitations": "Reused historical periods; no explicit spread/slippage or order-book impact/live latency; one shared BTC/ETH portfolio; no BROBS daily-loss/cooldown/Grok/news gates in adapter; does not establish future accuracy",
+    "input_sha256": {
+      "BTCUSDT_2025_2026.csv": "689819b869f8d32d21c092b4f36106f192f5ad626769bdd16b99f7a78311f24d",
+      "ETHUSDT_1h.csv": "a06b2ad43b8e0c3066d974d0e45757817ce889fbb16090e69a504107d8a9d101"
+    }
+  }
+}

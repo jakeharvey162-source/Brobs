@@ -14,3 +14,7 @@ node_modules/
 /grok_request.json
 /grok_review.json
 /local-data/
+/user_data/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal

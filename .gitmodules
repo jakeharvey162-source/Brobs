@@ -1,0 +1,6 @@
+[submodule "external/freqtrade"]
+	path = external/freqtrade
+	url = https://github.com/freqtrade/freqtrade.git
+[submodule "external/hypergrok-trading-desk"]
+	path = external/hypergrok-trading-desk
+	url = https://github.com/galleonlabs/hypergrok-trading-desk.git

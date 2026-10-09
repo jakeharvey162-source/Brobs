@@ -1,0 +1,73 @@
+{
+  "test_count": 151,
+  "unit_tests": "passed",
+  "upstream_commits": {
+    "freqtrade": "2cdfc2325e3c2af1680e8adbe5245ac42709fda9",
+    "hypergrok": "735e5c88697f5d381b919c20c9c882469527c024"
+  },
+  "freqtrade_end_to_end": false,
+  "hypergrok_runtime_tested": false,
+  "live_orders_sent": 0,
+  "future_win_probability": null,
+  "combined_prediction_accuracy": null,
+  "verified_70_percent": false,
+  "results_source": "Existing BROBS lab reports; not new Freqtrade/HyperGrok runtime results",
+  "default_historical": {
+    "btc": {
+      "closed_trades": 113,
+      "wins": 36,
+      "win_rate_pct": 31.86,
+      "return_pct": -4.5641
+    },
+    "eth": {
+      "closed_trades": 63,
+      "wins": 20,
+      "win_rate_pct": 31.75,
+      "return_pct": -0.4582
+    },
+    "forex": {
+      "closed_trades": 28,
+      "wins": 11,
+      "win_rate_pct": 39.29,
+      "return_pct": 0.281
+    }
+  },
+  "full_upstream_sources_checked_out": true,
+  "freqtrade_version": "2026.9",
+  "freqtrade_strategy_load": "OK",
+  "freqtrade_offline_backtests_completed": 3,
+  "upstream_full_suites_run": false,
+  "freqtrade_offline_runs": {
+    "offline": {
+      "total_trades": 132,
+      "wins": 47,
+      "losses": 85,
+      "winrate": 0.3560606060606061,
+      "profit_total": 0.054027703133,
+      "profit_factor": 1.3082218575585736,
+      "max_drawdown_account": 0.02862751321492693,
+      "future_win_probability": null
+    },
+    "fee-stress": {
+      "total_trades": 129,
+      "wins": 42,
+      "losses": 87,
+      "winrate": 0.32558139534883723,
+      "profit_total": -0.0034976582409999937,
+      "profit_factor": 0.9822549562002424,
+      "max_drawdown_account": 0.05347920232743055,
+      "future_win_probability": null
+    },
+    "ten-unit": {
+      "total_trades": 0,
+      "wins": 0,
+      "losses": 0,
+      "winrate": null,
+      "profit_total": 0.0,
+      "profit_factor": 0.0,
+      "max_drawdown_account": 0.0,
+      "future_win_probability": null
+    }
+  },
+  "limitations": "Actual Freqtrade offline engine, synthetic market constraints, archived real candles; reused dates; live exchange and HyperGrok runtime unverified; fee stress loses; no explicit spread/slippage or BROBS daily-loss/Grok/news protections"
+}

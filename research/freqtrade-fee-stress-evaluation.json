@@ -1,0 +1,1192 @@
+{
+  "total_trades": 129,
+  "wins": 42,
+  "draws": 0,
+  "losses": 87,
+  "winrate": 0.32558139534883723,
+  "profit_total": -0.0034976582409999937,
+  "profit_total_abs": -34.976582409999935,
+  "profit_factor": 0.9822549562002424,
+  "max_drawdown_account": 0.05347920232743055,
+  "starting_balance": 10000,
+  "final_balance": 9965.02341759,
+  "backtest_start": "2026-03-23 00:00:00",
+  "backtest_end": "2026-09-30 23:00:00",
+  "trades": [
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-03-23 12:00:00+00:00",
+      "close_date": "2026-03-24 17:00:00+00:00",
+      "stake_amount": 1979.9690274,
+      "profit_abs": -26.10328014,
+      "profit_ratio": -0.013157366314280324,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-03-25 03:00:00+00:00",
+      "close_date": "2026-03-25 22:00:00+00:00",
+      "stake_amount": 1974.83084078,
+      "profit_abs": -0.09081156,
+      "profit_ratio": -4.5892689910291914e-05,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-03-28 07:00:00+00:00",
+      "close_date": "2026-03-29 08:00:00+00:00",
+      "stake_amount": 1974.798118,
+      "profit_abs": 0.68107361,
+      "profit_ratio": 0.0003441942624115497,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-03-30 03:00:00+00:00",
+      "close_date": "2026-03-30 22:00:00+00:00",
+      "stake_amount": 1974.94731602,
+      "profit_abs": -2.00601246,
+      "profit_ratio": -0.0010137022020153465,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-03-31 05:00:00+00:00",
+      "close_date": "2026-03-31 09:00:00+00:00",
+      "stake_amount": 1974.51404433,
+      "profit_abs": -47.30935067,
+      "profit_ratio": -0.023912172700885737,
+      "exit_reason": "stop_loss"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-03-31 14:00:00+00:00",
+      "close_date": "2026-04-01 17:00:00+00:00",
+      "stake_amount": 1965.18238059,
+      "profit_abs": 78.76862924,
+      "profit_ratio": 0.04000209202137487,
+      "exit_reason": "roi"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-04-01 18:00:00+00:00",
+      "close_date": "2026-04-02 01:00:00+00:00",
+      "stake_amount": 1980.77905126,
+      "profit_abs": -47.45558127,
+      "profit_ratio": -0.02391021831575376,
+      "exit_reason": "stop_loss"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-04-02 23:00:00+00:00",
+      "close_date": "2026-04-05 06:00:00+00:00",
+      "stake_amount": 1971.36136888,
+      "profit_abs": -9.37843125,
+      "profit_ratio": -0.004747841757528651,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-04-05 19:00:00+00:00",
+      "close_date": "2026-04-07 01:00:00+00:00",
+      "stake_amount": 1969.4935827,
+      "profit_abs": 31.83123305,
+      "profit_ratio": 0.0161298812718851,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-04-07 22:00:00+00:00",
+      "close_date": "2026-04-08 19:00:00+00:00",
+      "stake_amount": 1975.80575075,
+      "profit_abs": 25.14484331,
+      "profit_ratio": 0.012700972245105713,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-04-09 16:00:00+00:00",
+      "close_date": "2026-04-10 10:00:00+00:00",
+      "stake_amount": 1980.802894,
+      "profit_abs": -17.63971725,
+      "profit_ratio": -0.008887561850226646,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-04-10 15:00:00+00:00",
+      "close_date": "2026-04-11 09:00:00+00:00",
+      "stake_amount": 1977.29208,
+      "profit_abs": -14.535949,
+      "profit_ratio": -0.007336768946012528,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-04-11 17:00:00+00:00",
+      "close_date": "2026-04-12 01:00:00+00:00",
+      "stake_amount": 1974.4364154,
+      "profit_abs": -47.30435585,
+      "profit_ratio": -0.023910588160662383,
+      "exit_reason": "stop_loss"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-04-13 15:00:00+00:00",
+      "close_date": "2026-04-14 14:00:00+00:00",
+      "stake_amount": 1965.01247115,
+      "profit_abs": 78.75758607,
+      "profit_ratio": 0.03999994221583809,
+      "exit_reason": "roi"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-04-14 15:00:00+00:00",
+      "close_date": "2026-04-14 23:00:00+00:00",
+      "stake_amount": 1980.65935844,
+      "profit_abs": -34.02217555,
+      "profit_ratio": -0.017142910956031838,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-04-15 15:00:00+00:00",
+      "close_date": "2026-04-16 10:00:00+00:00",
+      "stake_amount": 1973.92671012,
+      "profit_abs": -8.16528884,
+      "profit_ratio": -0.00412831480343464,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-04-16 22:00:00+00:00",
+      "close_date": "2026-04-17 16:00:00+00:00",
+      "stake_amount": 1972.2691968,
+      "profit_abs": 79.04852995,
+      "profit_ratio": 0.03999999015402856,
+      "exit_reason": "roi"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-04-17 16:00:00+00:00",
+      "close_date": "2026-04-18 07:00:00+00:00",
+      "stake_amount": 1987.9630066,
+      "profit_abs": -33.91797231,
+      "profit_ratio": -0.017027616537171365,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-04-20 12:00:00+00:00",
+      "close_date": "2026-04-21 19:00:00+00:00",
+      "stake_amount": 1981.17778656,
+      "profit_abs": 3.05331532,
+      "profit_ratio": 0.0015380855261528685,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-04-22 02:00:00+00:00",
+      "close_date": "2026-04-23 01:00:00+00:00",
+      "stake_amount": 1981.85249875,
+      "profit_abs": 35.15848677,
+      "profit_ratio": 0.017704804051679734,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-04-23 23:00:00+00:00",
+      "close_date": "2026-04-24 10:00:00+00:00",
+      "stake_amount": 1988.7410718,
+      "profit_abs": -25.90592821,
+      "profit_ratio": -0.013000294576839282,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-04-24 20:00:00+00:00",
+      "close_date": "2026-04-25 12:00:00+00:00",
+      "stake_amount": 1983.6825755,
+      "profit_abs": -14.70549464,
+      "profit_ratio": -0.0073984328624705515,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-04-25 13:00:00+00:00",
+      "close_date": "2026-04-25 19:00:00+00:00",
+      "stake_amount": 1980.73179846,
+      "profit_abs": -14.14554847,
+      "profit_ratio": -0.007127322262050544,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-04-26 05:00:00+00:00",
+      "close_date": "2026-04-27 10:00:00+00:00",
+      "stake_amount": 1977.95574328,
+      "profit_abs": -4.72090656,
+      "profit_ratio": -0.002381996467221973,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-04-28 22:00:00+00:00",
+      "close_date": "2026-04-29 18:00:00+00:00",
+      "stake_amount": 1977.03540468,
+      "profit_abs": -13.93907857,
+      "profit_ratio": -0.007036422324533882,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-04-30 12:00:00+00:00",
+      "close_date": "2026-05-02 12:00:00+00:00",
+      "stake_amount": 1974.27436494,
+      "profit_abs": 46.08055309,
+      "profit_ratio": 0.023293913325730383,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-05-02 14:00:00+00:00",
+      "close_date": "2026-05-04 20:00:00+00:00",
+      "stake_amount": 1983.40007832,
+      "profit_abs": 33.60904465,
+      "profit_ratio": 0.016911343856028268,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-05-04 22:00:00+00:00",
+      "close_date": "2026-05-06 21:00:00+00:00",
+      "stake_amount": 1990.0263681,
+      "profit_abs": 20.95094685,
+      "profit_ratio": 0.01050696057498856,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-05-08 13:00:00+00:00",
+      "close_date": "2026-05-11 08:00:00+00:00",
+      "stake_amount": 1994.16315939,
+      "profit_abs": 9.79460184,
+      "profit_ratio": 0.00490183147276528,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-05-11 17:00:00+00:00",
+      "close_date": "2026-05-12 06:00:00+00:00",
+      "stake_amount": 1996.07922896,
+      "profit_abs": -16.57529473,
+      "profit_ratio": -0.008287351558685414,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-05-13 02:00:00+00:00",
+      "close_date": "2026-05-13 14:00:00+00:00",
+      "stake_amount": 1992.82835999,
+      "profit_abs": -41.1157497,
+      "profit_ratio": -0.020590675624234517,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-05-14 09:00:00+00:00",
+      "close_date": "2026-05-15 08:00:00+00:00",
+      "stake_amount": 1984.6830192,
+      "profit_abs": 16.71002873,
+      "profit_ratio": 0.008402689607312542,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-05-17 05:00:00+00:00",
+      "close_date": "2026-05-17 23:00:00+00:00",
+      "stake_amount": 1988.02777687,
+      "profit_abs": -15.12608138,
+      "profit_ratio": -0.007593399738390851,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-05-19 01:00:00+00:00",
+      "close_date": "2026-05-19 14:00:00+00:00",
+      "stake_amount": 1985.033475,
+      "profit_abs": -23.57805788,
+      "profit_ratio": -0.01185420607993704,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-05-20 07:00:00+00:00",
+      "close_date": "2026-05-21 13:00:00+00:00",
+      "stake_amount": 1980.3300921,
+      "profit_abs": -11.3826558,
+      "profit_ratio": -0.005736385046847066,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-05-21 22:00:00+00:00",
+      "close_date": "2026-05-22 10:00:00+00:00",
+      "stake_amount": 1978.11073647,
+      "profit_abs": -18.50694183,
+      "profit_ratio": -0.009337193052855877,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-05-23 19:00:00+00:00",
+      "close_date": "2026-05-24 19:00:00+00:00",
+      "stake_amount": 1974.41838624,
+      "profit_abs": 13.40327598,
+      "profit_ratio": 0.006774918136578655,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-05-25 04:00:00+00:00",
+      "close_date": "2026-05-26 00:00:00+00:00",
+      "stake_amount": 1977.04379556,
+      "profit_abs": -0.34310054,
+      "profit_ratio": -0.00017319581354334373,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-05-26 14:00:00+00:00",
+      "close_date": "2026-05-26 15:00:00+00:00",
+      "stake_amount": 1977.0326961,
+      "profit_abs": -47.36413314,
+      "profit_ratio": -0.023909363788136802,
+      "exit_reason": "stop_loss"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-05-28 20:00:00+00:00",
+      "close_date": "2026-05-29 13:00:00+00:00",
+      "stake_amount": 1967.65359604,
+      "profit_abs": -22.25825719,
+      "profit_ratio": -0.011289502164224715,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-05-29 17:00:00+00:00",
+      "close_date": "2026-05-31 12:00:00+00:00",
+      "stake_amount": 1963.24695314,
+      "profit_abs": -24.34981965,
+      "profit_ratio": -0.01237807458542172,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-06-01 23:00:00+00:00",
+      "close_date": "2026-06-02 02:00:00+00:00",
+      "stake_amount": 1958.42657868,
+      "profit_abs": -46.91570999,
+      "profit_ratio": -0.023908001641727104,
+      "exit_reason": "stop_loss"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-06-07 03:00:00+00:00",
+      "close_date": "2026-06-07 20:00:00+00:00",
+      "stake_amount": 1949.08676697,
+      "profit_abs": -13.44911074,
+      "profit_ratio": -0.006886438528568299,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-06-07 22:00:00+00:00",
+      "close_date": "2026-06-07 22:00:00+00:00",
+      "stake_amount": 1946.47351238,
+      "profit_abs": 78.00934435,
+      "profit_ratio": 0.03999727537039782,
+      "exit_reason": "roi"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-06-07 23:00:00+00:00",
+      "close_date": "2026-06-09 10:00:00+00:00",
+      "stake_amount": 1961.91954805,
+      "profit_abs": -10.1304749,
+      "profit_ratio": -0.005153246167135851,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-06-10 16:00:00+00:00",
+      "close_date": "2026-06-10 21:00:00+00:00",
+      "stake_amount": 1959.85622824,
+      "profit_abs": -46.95801159,
+      "profit_ratio": -0.023912102504599225,
+      "exit_reason": "stop_loss"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-06-11 02:00:00+00:00",
+      "close_date": "2026-06-12 14:00:00+00:00",
+      "stake_amount": 1950.59385557,
+      "profit_abs": 24.21449564,
+      "profit_ratio": 0.012389131260905899,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-06-12 15:00:00+00:00",
+      "close_date": "2026-06-14 16:00:00+00:00",
+      "stake_amount": 1955.39169447,
+      "profit_abs": -7.057135,
+      "profit_ratio": -0.0036018609070059466,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-06-14 23:00:00+00:00",
+      "close_date": "2026-06-15 13:00:00+00:00",
+      "stake_amount": 1954.01437674,
+      "profit_abs": 78.32226204,
+      "profit_ratio": 0.04000274056839318,
+      "exit_reason": "roi"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-06-15 13:00:00+00:00",
+      "close_date": "2026-06-16 03:00:00+00:00",
+      "stake_amount": 1969.48024624,
+      "profit_abs": -32.13525932,
+      "profit_ratio": -0.01628405115870361,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-06-16 20:00:00+00:00",
+      "close_date": "2026-06-17 07:00:00+00:00",
+      "stake_amount": 1963.15874712,
+      "profit_abs": -13.34159802,
+      "profit_ratio": -0.006782420475861009,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-06-19 17:00:00+00:00",
+      "close_date": "2026-06-21 16:00:00+00:00",
+      "stake_amount": 1960.507276,
+      "profit_abs": 31.05852986,
+      "profit_ratio": 0.01581046761003051,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-06-22 06:00:00+00:00",
+      "close_date": "2026-06-22 22:00:00+00:00",
+      "stake_amount": 1966.6665183,
+      "profit_abs": -12.5111854,
+      "profit_ratio": -0.006348922330179834,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-06-24 02:00:00+00:00",
+      "close_date": "2026-06-24 13:00:00+00:00",
+      "stake_amount": 1964.17658209,
+      "profit_abs": -47.06155254,
+      "profit_ratio": -0.023912115506138913,
+      "exit_reason": "stop_loss"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-06-25 07:00:00+00:00",
+      "close_date": "2026-06-25 13:00:00+00:00",
+      "stake_amount": 1954.86914402,
+      "profit_abs": -46.83862677,
+      "profit_ratio": -0.023912156289335622,
+      "exit_reason": "stop_loss"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-06-26 08:00:00+00:00",
+      "close_date": "2026-06-26 10:00:00+00:00",
+      "stake_amount": 1945.559012,
+      "profit_abs": -46.61559393,
+      "profit_ratio": -0.023912175649974752,
+      "exit_reason": "stop_loss"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-06-26 18:00:00+00:00",
+      "close_date": "2026-06-28 00:00:00+00:00",
+      "stake_amount": 1936.36699179,
+      "profit_abs": -17.40848899,
+      "profit_ratio": -0.008972339221154323,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-06-28 16:00:00+00:00",
+      "close_date": "2026-06-28 21:00:00+00:00",
+      "stake_amount": 1932.9205839,
+      "profit_abs": -17.1274199,
+      "profit_ratio": -0.008843215585528709,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-06-29 07:00:00+00:00",
+      "close_date": "2026-06-30 05:00:00+00:00",
+      "stake_amount": 1929.504909,
+      "profit_abs": -26.42107039,
+      "profit_ratio": -0.013665854696488306,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-07-01 04:00:00+00:00",
+      "close_date": "2026-07-01 13:00:00+00:00",
+      "stake_amount": 1924.297746,
+      "profit_abs": -37.28406066,
+      "profit_ratio": -0.019336738014994023,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-07-01 14:00:00+00:00",
+      "close_date": "2026-07-02 14:00:00+00:00",
+      "stake_amount": 1916.90753054,
+      "profit_abs": 76.82968532,
+      "profit_ratio": 0.040000016397812685,
+      "exit_reason": "roi"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-07-02 14:00:00+00:00",
+      "close_date": "2026-07-04 15:00:00+00:00",
+      "stake_amount": 1932.12754441,
+      "profit_abs": 77.43956085,
+      "profit_ratio": 0.03999994259792174,
+      "exit_reason": "roi"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-07-04 15:00:00+00:00",
+      "close_date": "2026-07-05 07:00:00+00:00",
+      "stake_amount": 1947.40071738,
+      "profit_abs": -5.05572381,
+      "profit_ratio": -0.00259095752603937,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-07-05 19:00:00+00:00",
+      "close_date": "2026-07-06 09:00:00+00:00",
+      "stake_amount": 1946.45987568,
+      "profit_abs": -24.95102627,
+      "profit_ratio": -0.012793083553112542,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-07-06 21:00:00+00:00",
+      "close_date": "2026-07-08 02:00:00+00:00",
+      "stake_amount": 1941.520104,
+      "profit_abs": -46.51882169,
+      "profit_ratio": -0.023912175647756776,
+      "exit_reason": "stop_loss"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-07-09 05:00:00+00:00",
+      "close_date": "2026-07-10 21:00:00+00:00",
+      "stake_amount": 1932.25626186,
+      "profit_abs": 35.1132905,
+      "profit_ratio": 0.018135898836774165,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-07-10 23:00:00+00:00",
+      "close_date": "2026-07-12 07:00:00+00:00",
+      "stake_amount": 1939.2612096,
+      "profit_abs": -7.82173009,
+      "profit_ratio": -0.004025305005663234,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-07-12 16:00:00+00:00",
+      "close_date": "2026-07-13 03:00:00+00:00",
+      "stake_amount": 1937.71324032,
+      "profit_abs": -46.41826364,
+      "profit_ratio": -0.023907362271787594,
+      "exit_reason": "stop_loss"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-07-14 05:00:00+00:00",
+      "close_date": "2026-07-14 12:00:00+00:00",
+      "stake_amount": 1928.52214016,
+      "profit_abs": 77.29396486,
+      "profit_ratio": 0.03999937770101102,
+      "exit_reason": "roi"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-07-14 12:00:00+00:00",
+      "close_date": "2026-07-16 01:00:00+00:00",
+      "stake_amount": 1943.7955407,
+      "profit_abs": 45.90698275,
+      "profit_ratio": 0.023570046893619863,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-07-16 06:00:00+00:00",
+      "close_date": "2026-07-16 08:00:00+00:00",
+      "stake_amount": 1952.91527835,
+      "profit_abs": -23.00374265,
+      "profit_ratio": -0.011755669716202354,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-07-17 19:00:00+00:00",
+      "close_date": "2026-07-19 13:00:00+00:00",
+      "stake_amount": 1948.3550136,
+      "profit_abs": -2.30346437,
+      "profit_ratio": -0.0011799013119682446,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-07-19 15:00:00+00:00",
+      "close_date": "2026-07-19 21:00:00+00:00",
+      "stake_amount": 1947.90414326,
+      "profit_abs": -15.6104148,
+      "profit_ratio": -0.00799795839098725,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-07-20 03:00:00+00:00",
+      "close_date": "2026-07-20 08:00:00+00:00",
+      "stake_amount": 1944.75087281,
+      "profit_abs": -24.16102661,
+      "profit_ratio": -0.012398915123325324,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-07-20 16:00:00+00:00",
+      "close_date": "2026-07-22 04:00:00+00:00",
+      "stake_amount": 1940.0174325,
+      "profit_abs": 10.28058841,
+      "profit_ratio": 0.005288647463456798,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-07-22 16:00:00+00:00",
+      "close_date": "2026-07-23 05:00:00+00:00",
+      "stake_amount": 1942.06459392,
+      "profit_abs": -31.00998517,
+      "profit_ratio": -0.01593566408084716,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-07-24 05:00:00+00:00",
+      "close_date": "2026-07-24 13:00:00+00:00",
+      "stake_amount": 1935.89518038,
+      "profit_abs": -46.38404261,
+      "profit_ratio": -0.0239121726009629,
+      "exit_reason": "stop_loss"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-07-25 16:00:00+00:00",
+      "close_date": "2026-07-26 22:00:00+00:00",
+      "stake_amount": 1926.74063456,
+      "profit_abs": 77.22257798,
+      "profit_ratio": 0.03999938534301173,
+      "exit_reason": "roi"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-07-26 22:00:00+00:00",
+      "close_date": "2026-07-27 16:00:00+00:00",
+      "stake_amount": 1941.97913426,
+      "profit_abs": -16.85297626,
+      "profit_ratio": -0.008660926004871531,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-07-28 18:00:00+00:00",
+      "close_date": "2026-07-29 15:00:00+00:00",
+      "stake_amount": 1938.6941574,
+      "profit_abs": -14.54021637,
+      "profit_ratio": -0.007485035185486409,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-07-30 06:00:00+00:00",
+      "close_date": "2026-07-31 04:00:00+00:00",
+      "stake_amount": 1935.81582908,
+      "profit_abs": -5.14887976,
+      "profit_ratio": -0.002654489377397203,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-08-01 09:00:00+00:00",
+      "close_date": "2026-08-01 19:00:00+00:00",
+      "stake_amount": 1934.75643625,
+      "profit_abs": -24.43073473,
+      "profit_ratio": -0.012602087958772207,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-08-02 04:00:00+00:00",
+      "close_date": "2026-08-03 06:00:00+00:00",
+      "stake_amount": 1929.94136145,
+      "profit_abs": -26.98545144,
+      "profit_ratio": -0.013954614788523348,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-08-03 17:00:00+00:00",
+      "close_date": "2026-08-05 12:00:00+00:00",
+      "stake_amount": 1924.58223342,
+      "profit_abs": 1.30112722,
+      "profit_ratio": 0.0006747075480236243,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-08-05 15:00:00+00:00",
+      "close_date": "2026-08-06 14:00:00+00:00",
+      "stake_amount": 1924.87323968,
+      "profit_abs": 24.60959297,
+      "profit_ratio": 0.012759526975413276,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-08-06 18:00:00+00:00",
+      "close_date": "2026-08-07 01:00:00+00:00",
+      "stake_amount": 1929.7467448,
+      "profit_abs": -17.97184532,
+      "profit_ratio": -0.009294470075715757,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-08-07 12:00:00+00:00",
+      "close_date": "2026-08-09 02:00:00+00:00",
+      "stake_amount": 1926.1880076,
+      "profit_abs": -12.68633131,
+      "profit_ratio": -0.006573091121667082,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-08-09 14:00:00+00:00",
+      "close_date": "2026-08-10 01:00:00+00:00",
+      "stake_amount": 1923.67543104,
+      "profit_abs": -18.24529174,
+      "profit_ratio": -0.009465668531292553,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-08-10 02:00:00+00:00",
+      "close_date": "2026-08-10 11:00:00+00:00",
+      "stake_amount": 1920.04107,
+      "profit_abs": -12.88086133,
+      "profit_ratio": -0.006695247944849488,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-08-11 11:00:00+00:00",
+      "close_date": "2026-08-11 18:00:00+00:00",
+      "stake_amount": 1917.49038196,
+      "profit_abs": -26.30087175,
+      "profit_ratio": -0.013688921335380943,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-08-12 04:00:00+00:00",
+      "close_date": "2026-08-12 20:00:00+00:00",
+      "stake_amount": 1912.30514767,
+      "profit_abs": -14.99330433,
+      "profit_ratio": -0.007824785491521607,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-08-13 08:00:00+00:00",
+      "close_date": "2026-08-13 17:00:00+00:00",
+      "stake_amount": 1909.33315264,
+      "profit_abs": -28.69304296,
+      "profit_ratio": -0.014997786728613344,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-08-15 00:00:00+00:00",
+      "close_date": "2026-08-16 10:00:00+00:00",
+      "stake_amount": 1903.6002942,
+      "profit_abs": -9.14765013,
+      "profit_ratio": -0.004795855188256353,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-08-16 18:00:00+00:00",
+      "close_date": "2026-08-17 01:00:00+00:00",
+      "stake_amount": 1901.84310602,
+      "profit_abs": -13.9100739,
+      "profit_ratio": -0.007299397746057364,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-08-17 03:00:00+00:00",
+      "close_date": "2026-08-18 04:00:00+00:00",
+      "stake_amount": 1899.0893721,
+      "profit_abs": -15.2378974,
+      "profit_ratio": -0.008007776073389011,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-08-18 07:00:00+00:00",
+      "close_date": "2026-08-18 14:00:00+00:00",
+      "stake_amount": 1896.03120637,
+      "profit_abs": -10.46846574,
+      "profit_ratio": -0.005510231352575961,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-08-18 16:00:00+00:00",
+      "close_date": "2026-08-19 05:00:00+00:00",
+      "stake_amount": 1893.96231718,
+      "profit_abs": -23.2801223,
+      "profit_ratio": -0.012267221358772082,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-08-19 07:00:00+00:00",
+      "close_date": "2026-08-19 15:00:00+00:00",
+      "stake_amount": 1889.39124516,
+      "profit_abs": 75.72781475,
+      "profit_ratio": 0.04000053542152706,
+      "exit_reason": "roi"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-08-19 15:00:00+00:00",
+      "close_date": "2026-08-19 15:00:00+00:00",
+      "stake_amount": 1904.32376727,
+      "profit_abs": 76.32533886,
+      "profit_ratio": 0.04000002215140735,
+      "exit_reason": "roi"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-08-19 16:00:00+00:00",
+      "close_date": "2026-08-20 08:00:00+00:00",
+      "stake_amount": 1919.443446,
+      "profit_abs": 76.93140083,
+      "profit_ratio": 0.04000005590147539,
+      "exit_reason": "roi"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-08-20 09:00:00+00:00",
+      "close_date": "2026-08-21 01:00:00+00:00",
+      "stake_amount": 1934.70518064,
+      "profit_abs": 77.5428645,
+      "profit_ratio": 0.039999938542446725,
+      "exit_reason": "roi"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-08-21 01:00:00+00:00",
+      "close_date": "2026-08-21 08:00:00+00:00",
+      "stake_amount": 1950.08330314,
+      "profit_abs": 78.15923416,
+      "profit_ratio": 0.03999994645305202,
+      "exit_reason": "roi"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-08-21 08:00:00+00:00",
+      "close_date": "2026-08-22 11:00:00+00:00",
+      "stake_amount": 1965.55846428,
+      "profit_abs": 9.29298824,
+      "profit_ratio": 0.004718475451034089,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-08-23 14:00:00+00:00",
+      "close_date": "2026-08-23 14:00:00+00:00",
+      "stake_amount": 1967.39906075,
+      "profit_abs": -47.13489031,
+      "profit_ratio": -0.02391015103701542,
+      "exit_reason": "stop_loss"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-08-23 15:00:00+00:00",
+      "close_date": "2026-08-25 14:00:00+00:00",
+      "stake_amount": 1958.06466745,
+      "profit_abs": 9.61842919,
+      "profit_ratio": 0.004902407406719643,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-08-26 22:00:00+00:00",
+      "close_date": "2026-08-28 03:00:00+00:00",
+      "stake_amount": 1959.96874452,
+      "profit_abs": -11.41225207,
+      "profit_ratio": -0.005811048342274355,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-08-29 15:00:00+00:00",
+      "close_date": "2026-08-31 02:00:00+00:00",
+      "stake_amount": 1957.69260078,
+      "profit_abs": -17.18313156,
+      "profit_ratio": -0.008759717376151388,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-08-31 16:00:00+00:00",
+      "close_date": "2026-09-01 10:00:00+00:00",
+      "stake_amount": 1954.30878816,
+      "profit_abs": -19.86259703,
+      "profit_ratio": -0.010143203186640738,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-09-02 21:00:00+00:00",
+      "close_date": "2026-09-03 15:00:00+00:00",
+      "stake_amount": 1950.321576,
+      "profit_abs": 78.16878143,
+      "profit_ratio": 0.03999994507478272,
+      "exit_reason": "roi"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-09-03 15:00:00+00:00",
+      "close_date": "2026-09-04 12:00:00+00:00",
+      "stake_amount": 1965.8518782,
+      "profit_abs": -47.09456057,
+      "profit_ratio": -0.023908494822169966,
+      "exit_reason": "stop_loss"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-09-05 09:00:00+00:00",
+      "close_date": "2026-09-06 16:00:00+00:00",
+      "stake_amount": 1956.5272386,
+      "profit_abs": 10.39781324,
+      "profit_ratio": 0.005303815309610424,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-09-07 00:00:00+00:00",
+      "close_date": "2026-09-07 08:00:00+00:00",
+      "stake_amount": 1958.57313174,
+      "profit_abs": -30.80109886,
+      "profit_ratio": -0.01569490519531908,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-09-08 02:00:00+00:00",
+      "close_date": "2026-09-08 05:00:00+00:00",
+      "stake_amount": 1952.48807936,
+      "profit_abs": -27.51893919,
+      "profit_ratio": -0.01406616074023203,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-09-09 01:00:00+00:00",
+      "close_date": "2026-09-09 19:00:00+00:00",
+      "stake_amount": 1947.03817833,
+      "profit_abs": -19.3398913,
+      "profit_ratio": -0.009913153700514418,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-09-11 07:00:00+00:00",
+      "close_date": "2026-09-11 13:00:00+00:00",
+      "stake_amount": 1943.21092976,
+      "profit_abs": 77.88778263,
+      "profit_ratio": 0.040001997108781426,
+      "exit_reason": "roi"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-09-11 13:00:00+00:00",
+      "close_date": "2026-09-11 23:00:00+00:00",
+      "stake_amount": 1958.627798,
+      "profit_abs": -29.9529836,
+      "profit_ratio": -0.015262316421789508,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-09-12 14:00:00+00:00",
+      "close_date": "2026-09-12 23:00:00+00:00",
+      "stake_amount": 1952.70047343,
+      "profit_abs": -24.33815137,
+      "profit_ratio": -0.012438964683038794,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-09-13 20:00:00+00:00",
+      "close_date": "2026-09-15 04:00:00+00:00",
+      "stake_amount": 1947.86618804,
+      "profit_abs": 2.09339383,
+      "profit_ratio": 0.001072566181408912,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-09-16 13:00:00+00:00",
+      "close_date": "2026-09-18 13:00:00+00:00",
+      "stake_amount": 1948.27481508,
+      "profit_abs": 78.08687207,
+      "profit_ratio": 0.04000000895494828,
+      "exit_reason": "roi"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-09-18 13:00:00+00:00",
+      "close_date": "2026-09-18 18:00:00+00:00",
+      "stake_amount": 1963.75761069,
+      "profit_abs": 78.70792426,
+      "profit_ratio": 0.04000026387532129,
+      "exit_reason": "roi"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-09-18 18:00:00+00:00",
+      "close_date": "2026-09-20 03:00:00+00:00",
+      "stake_amount": 1979.29417,
+      "profit_abs": -24.67872281,
+      "profit_ratio": -0.012443559050262615,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-09-20 18:00:00+00:00",
+      "close_date": "2026-09-21 09:00:00+00:00",
+      "stake_amount": 1974.41052814,
+      "profit_abs": 79.13438528,
+      "profit_ratio": 0.040000005717944424,
+      "exit_reason": "roi"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-09-21 09:00:00+00:00",
+      "close_date": "2026-09-22 07:00:00+00:00",
+      "stake_amount": 1990.12497581,
+      "profit_abs": 17.41629315,
+      "profit_ratio": 0.00873388872613184,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-09-22 16:00:00+00:00",
+      "close_date": "2026-09-23 11:00:00+00:00",
+      "stake_amount": 1993.5504477,
+      "profit_abs": -19.25681415,
+      "profit_ratio": -0.00964027643111927,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-09-24 20:00:00+00:00",
+      "close_date": "2026-09-25 17:00:00+00:00",
+      "stake_amount": 1989.69033744,
+      "profit_abs": -23.72939099,
+      "profit_ratio": -0.01190236816780133,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-09-26 09:00:00+00:00",
+      "close_date": "2026-09-27 23:00:00+00:00",
+      "stake_amount": 1984.98141569,
+      "profit_abs": -8.52185653,
+      "profit_ratio": -0.0042845977141659905,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "ETH/USDT",
+      "open_date": "2026-09-28 16:00:00+00:00",
+      "close_date": "2026-09-29 05:00:00+00:00",
+      "stake_amount": 1983.37341396,
+      "profit_abs": -15.23632265,
+      "profit_ratio": -0.007666690861799553,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-09-29 10:00:00+00:00",
+      "close_date": "2026-09-29 20:00:00+00:00",
+      "stake_amount": 1980.31600903,
+      "profit_abs": -23.49604405,
+      "profit_ratio": -0.011841113060520535,
+      "exit_reason": "exit_signal"
+    },
+    {
+      "pair": "BTC/USDT",
+      "open_date": "2026-09-30 12:00:00+00:00",
+      "close_date": "2026-09-30 23:00:00+00:00",
+      "stake_amount": 1975.69876248,
+      "profit_abs": -13.29087194,
+      "profit_ratio": -0.0067137478169206925,
+      "exit_reason": "force_exit"
+    }
+  ],
+  "brobs_assumptions": {
+    "engine": "Freqtrade 2026.9",
+    "capital": 10000,
+    "fee_per_fill": 0.002,
+    "metadata": "Synthetic spot constraints: 5 USDT minimum cost, 0.000001 unit step, 0.01 price tick; not verified current Binance rules",
+    "live_exchange_tested": false,
+    "hypergrok_runtime_tested": false,
+    "future_win_probability": null,
+    "limitations": "Reused historical periods; no explicit spread/slippage or order-book impact/live latency; equity is one shared BTC/ETH portfolio; no BROBS daily-loss/cooldown/Grok/news gates in this adapter; does not establish future accuracy",
+    "input_sha256": {
+      "BTCUSDT_2025_2026.csv": "689819b869f8d32d21c092b4f36106f192f5ad626769bdd16b99f7a78311f24d",
+      "ETHUSDT_1h.csv": "a06b2ad43b8e0c3066d974d0e45757817ce889fbb16090e69a504107d8a9d101"
+    }
+  }
+}
