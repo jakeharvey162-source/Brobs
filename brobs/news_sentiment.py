@@ -32,6 +32,7 @@ NEGATIVE = frozenset({
     "collapse", "collapses", "collapsed", "liquidation", "liquidations",
     "investigation", "investigated", "scam", "scandal",
 })
+_CACHE = {}  # Fixed-symbol 15-minute in-process TTL; no persistent credentials or data.
 POSITIVE = frozenset({
     "surge", "surges", "rally", "rallies", "record", "rebound", "rebounds",
     "recovery", "recovers", "upgrade", "upgraded", "growth", "profit", "profits",
@@ -137,6 +138,12 @@ def get_news_review(symbol, now, fetch=None):
     """Fetch no more than 35 indexed articles for a fixed, whitelisted asset."""
     if symbol not in ASSETS:
         return dict(status="unsupported", sentiment="unknown", reason="Asset not supported for news risk guard", articles=[])
+    moment = _utc(now)
+    # Do not hammer the free API every time a paper runner polls (often 30s).
+    # Deterministic fixture tests pass their own transport and bypass caching.
+    cached = _CACHE.get(symbol) if fetch is None else None
+    if cached and 0 <= (moment - cached[0]).total_seconds() < 900:
+        return cached[1]
     params = {"query": '"' + ASSETS[symbol][0] + '" sourcelang:english',
               "mode": "artlist", "format": "json", "maxrecords": "35", "timespan": "1d", "sort": "datedesc"}
     url = GDELT_URL + "?" + urlencode(params)
@@ -147,9 +154,12 @@ def get_news_review(symbol, now, fetch=None):
         data = json.loads(raw)
         if not isinstance(data, dict):
             raise ValueError("Invalid GDELT response object")
-        return evaluate_articles(symbol, data.get("articles"), now)
+        result = evaluate_articles(symbol, data.get("articles"), moment)
     except (OSError, ValueError, TypeError, KeyError, TimeoutError) as exc:
-        return dict(status="unavailable", sentiment="unknown", reason="Fresh verified publisher metadata unavailable: " + type(exc).__name__, articles=[])
+        result = dict(status="unavailable", sentiment="unknown", reason="Fresh verified publisher metadata unavailable: " + type(exc).__name__, articles=[])
+    if fetch is None:
+        _CACHE[symbol] = (moment, result)
+    return result
 
 def guard_entry(signal, symbol, now, fetch=None):
     """Fail closed for NEW paper entries only; no effect on existing exits or stops."""
