@@ -6,9 +6,10 @@ from .risk import RiskEngine
 from .paper import PaperBroker
 
 class PaperAlertService:
-    def __init__(self,token):
+    def __init__(self,token,pause_file=None):
         if not token or len(token)<24: raise ValueError("Configure a random secret with at least 24 characters")
         self.token=token
+        self.pause_file=pause_file if pause_file is not None else os.environ.get('BROBS_ALERT_PAUSE_FILE')
         self.broker=PaperBroker(Portfolio(),RiskEngine())
         self.seen=set()
     def handle(self,payload):
@@ -23,6 +24,12 @@ class PaperAlertService:
         if market==Market.FOREX:raise ValueError("Forex alerts require verified bid/ask quotes through the FX runner")
         action=payload.get("action")
         if action not in ("buy","sell","hold"): raise ValueError("Invalid action")
+        # Local operator kill switch: no new paper entries, but exits still permitted.
+        # Mark the alert as consumed so a stale buy cannot be replayed on resume.
+        if action=="buy" and self.pause_file and os.path.exists(self.pause_file):
+            self.seen.add(event_id)
+            return {"status":"paper_entries_paused","action":action,"symbol":symbol,"cash":round(self.broker.portfolio.cash,2)}
+
         price=float(payload.get("price",0))
         if not 0<price<1e12:raise ValueError("Invalid price")
         if action=="buy": fill=self.broker.buy(Instrument(symbol,market),price,{symbol:price,**{s:p["entry"] for s,p in self.broker.portfolio.positions.items()}})
