@@ -11,6 +11,7 @@ from urllib.request import Request, build_opener, HTTPRedirectHandler
 from collections import Counter
 import json
 import re
+import argparse
 
 GDELT_URL = "https://api.gdeltproject.org/api/v2/doc/doc"
 ASSETS = {
@@ -95,7 +96,7 @@ def evaluate_articles(symbol, articles, now):
             continue
         if url in seen_urls:
             continue
-        if item.get("language", "").lower() != "english":
+        if not isinstance(item.get("language"), str) or item["language"].lower() != "english":
             continue
         if not re.search(ASSETS[symbol][1], title, re.IGNORECASE):
             continue
@@ -144,6 +145,8 @@ def get_news_review(symbol, now, fetch=None):
         if not isinstance(raw, (bytes, bytearray)) or len(raw) > 400000:
             raise ValueError("Invalid provider response")
         data = json.loads(raw)
+        if not isinstance(data, dict):
+            raise ValueError("Invalid GDELT response object")
         return evaluate_articles(symbol, data.get("articles"), now)
     except (OSError, ValueError, TypeError, KeyError, TimeoutError) as exc:
         return dict(status="unavailable", sentiment="unknown", reason="Fresh verified publisher metadata unavailable: " + type(exc).__name__, articles=[])
@@ -159,3 +162,16 @@ def guard_entry(signal, symbol, now, fetch=None):
     allow = votes[-1]["action"] == "clear"
     # Positive coverage never forces a buy: other signals and risk gates still decide.
     return {**signal, "action":signal["action"] if allow else "hold", "votes":votes}
+
+def main():
+    parser = argparse.ArgumentParser(description="Inspect source-checked public news metadata; research only, not a trading recommendation")
+    parser.add_argument("--symbol", choices=tuple(ASSETS), default="BTC_USDT")
+    args = parser.parse_args()
+    report = get_news_review(args.symbol, datetime.now(timezone.utc))
+    print(json.dumps(report, indent=2, ensure_ascii=False))
+    # Nonzero exit if provenance is insufficient; scripts must not mistake unknown for verified.
+    if report["status"] != "verified_metadata":
+        raise SystemExit(2)
+
+if __name__ == "__main__":
+    main()
