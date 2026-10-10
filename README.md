@@ -23,6 +23,19 @@ The second command still needs your configured market-data feed; it creates **on
 
 Neither addition makes BROBS a verified 70%, 80% or 90% win-rate trading system. Only comparable future out-of-sample data can support a performance upgrade. Real-money execution remains disabled.
 
+## Free OANDA account check (practice or live, read-only)
+
+BROBS now includes `brobs/broker_readiness.py` for a real API authentication and account-state preflight, **GET requests only**. It checks broker positions, pending orders, USD account restrictions and unresolved local attempts. Neither this check nor any other BROBS switch places a **live-money order** or guarantees trading performance.
+
+```powershell
+# Enter your own credentials privately in your terminal; never paste them into GitHub or chat.
+$env:OANDA_PRACTICE_TOKEN = "YOUR_OWN_TOKEN"
+$env:OANDA_PRACTICE_ACCOUNT = "YOUR_PRACTICE_ACCOUNT"
+python -m brobs.broker_readiness --environment practice
+```
+
+Read the complete [broker/live-readiness audit](docs/REAL_MONEY_READINESS.md) before considering an exchange or funded account. It also compares additional public claims of 75%–100% win rates, identifies sources without redistribution licences, and explains why unverified candidate strategies have **not** been auto-enabled.
+
 ## Run now — no account required for a labeled demo
 
 Requires Python 3.11 or newer. No core dependencies.
