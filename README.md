@@ -8,6 +8,21 @@ The new [Freqtrade/HyperGrok integration report](docs/REPO_INTEGRATION.md) cover
 
 The app polls OANDA's practice-data API, evaluates trend/momentum/volatility votes, simulates trades locally and persists positions, trades and decisions in SQLite. It does **not** submit orders to OANDA, and its local paper balance is separate from the broker account balance.
 
+## New: free source-checked news and optional research strategy
+
+**News provenance guard (opt-in, stocks/crypto paper only):** BROBS can read free [GDELT](https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts/) article metadata and check article age, HTTPS publisher domain, asset mentions, and two distinct whitelisted publishers. It produces a cautious headline-tone label plus cited source URLs. It **cannot certify news is true or predict the probability of a winning trade**. Missing/stale/negative/conflicting news blocks new *paper* entries when enabled; no news failure interrupts an existing protective exit. 15-minute in-memory cache limits requests to the free source.
+
+```bash
+python -m brobs.news_sentiment --symbol BTC_USDT
+python -m brobs.market_runner --market crypto --symbols BTC_USDT --news-guard --db news_paper.db
+```
+
+The second command still needs your configured market-data feed; it creates **only simulated positions**. The feed-check command makes no orders. The normal runner remains unchanged without `--news-guard`. See [NEWS_PROVENANCE.md](docs/NEWS_PROVENANCE.md).
+
+**Additional MIT-licensed research candidate:** `integrations/freqtrade/TrendRiderStrategy.py` contains the attributed public TrendRider Freqtrade strategy. It is an **independent, optional Freqtrade script**, not imported into BROBS execution or demonstrated profitable. BROBS also documents an external 74.5%-win historical claim whose author's own forward account fell to 55.3% wins with a loss; that repository has no declared software license and is therefore **not redistributed**. See [HIGH_WINRATE_CANDIDATES.md](docs/HIGH_WINRATE_CANDIDATES.md).
+
+Neither addition makes BROBS a verified 70%, 80% or 90% win-rate trading system. Only comparable future out-of-sample data can support a performance upgrade. Real-money execution remains disabled.
+
 ## Run now — no account required for a labeled demo
 
 Requires Python 3.11 or newer. No core dependencies.
