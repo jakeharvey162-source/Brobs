@@ -38,6 +38,25 @@ python -m brobs.app --db brobs_fx.db
 
 The practice account currency must be USD. EUR_USD, GBP_USD, AUD_USD and NZD_USD are supported. Quotes must be fresh and tradeable. The runner checks completed candles, current executable bid/ask and all open-position marks. Invalid data creates no new trades. This integration has been fixture-tested; a real credentialed OANDA session has **not** been verified in the development environment.
 
+## Emergency stop for TradingView paper alerts
+
+The TradingView alert receiver is **paper only**. To prevent new entries quickly when an operator notices suspicious trades, configure a local pause marker before starting it:
+
+```powershell
+$env:BROBS_ALERT_PAUSE_FILE = "C:\\brobs\\paper-stop.marker"
+python -m brobs.alerts
+```
+
+Creating that marker blocks **new paper buy alerts**. Previously open paper positions can still receive sell/exit alerts. Stale buy events received while paused are consumed rather than executed later.
+
+```powershell
+New-Item -Path "C:\\brobs\\paper-stop.marker" -ItemType File
+# After human review and confirmation only:
+Remove-Item -Path "C:\\brobs\\paper-stop.marker"
+```
+
+This is a **local paper-entry kill switch**, not a brokerage emergency liquidation control. It cannot cancel actual broker orders, guarantee exits, or prove a strategy is profitable. The marker must be created on the machine running the alert receiver. It is available without a paid API.
+
 ## Risk controls
 
 Default: $10,000 paper capital, 0.5% risk budget per entry, 0.5% stop distance, 2:1 take-profit distance, at most 20% of NAV notional per pair, no leverage, 2% daily equity-loss halt and 10% peak drawdown halt. Position sizing also reserves full notional, so the risk budget is a cap rather than a target.
