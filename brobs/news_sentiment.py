@@ -14,10 +14,10 @@ import re
 
 GDELT_URL = "https://api.gdeltproject.org/api/v2/doc/doc"
 ASSETS = {
-    "BTC_USDT": ("Bitcoin", r"\\b(?:bitcoin|btc)\\b"),
-    "ETH_USDT": ("Ethereum", r"\\b(?:ethereum|ether|eth)\\b"),
-    "AAPL": ("Apple", r"\\b(?:apple|aapl|iphone)\\b"),
-    "MSFT": ("Microsoft", r"\\b(?:microsoft|msft)\\b"),
+    "BTC_USDT": ("Bitcoin", r"\b(?:bitcoin|btc)\b"),
+    "ETH_USDT": ("Ethereum", r"\b(?:ethereum|ether|eth)\b"),
+    "AAPL": ("Apple", r"\b(?:apple|aapl|iphone)\b"),
+    "MSFT": ("Microsoft", r"\b(?:microsoft|msft)\b"),
 }
 # Whitelisted *publisher hosts*, not proof that every article is true.
 PUBLISHERS = frozenset({
@@ -49,7 +49,7 @@ def _utc(value):
 def _seen(value):
     if not isinstance(value, str):
         raise ValueError("Missing GDELT seen timestamp")
-    if re.fullmatch(r"\\d{8}T\\d{6}Z", value):
+    if re.fullmatch(r"\d{8}T\d{6}Z", value):
         return datetime.strptime(value, "%Y%m%dT%H%M%SZ").replace(tzinfo=timezone.utc)
     return _utc(value)
 
@@ -62,7 +62,7 @@ def _host(domain, url):
             return None
         host = parsed.hostname.lower().rstrip(".")
         domain = str(domain).lower().rstrip(".")
-        if not domain or domain != host or not any(host == allowed or host.endswith("." + allowed) for allowed in PUBLISHERS):
+        if not domain or (host != domain and not host.endswith("." + domain)) or not any(host == allowed or host.endswith("." + allowed) for allowed in PUBLISHERS):
             return None
         return host
     except ValueError:
