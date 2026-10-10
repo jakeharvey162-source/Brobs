@@ -11,7 +11,7 @@ from .market_data import BinanceData,AlpacaData
 from .market_signals import FAMILIES,signal
 
 
-def tick(data,book,symbols,family='trend',now=None,grok_review=None,grok_request=None,threshold=None,evidence_report=None):
+def tick(data,book,symbols,family='trend',now=None,grok_review=None,grok_request=None,threshold=None,evidence_report=None,news_guard=False,news_fetch=None):
     fixed_now=now is not None
     now=utc(now or datetime.now(timezone.utc))
     if family not in FAMILIES or len(set(symbols))!=len(symbols):raise ValueError('Invalid strategy or duplicate instruments')
@@ -31,6 +31,12 @@ def tick(data,book,symbols,family='trend',now=None,grok_review=None,grok_request
             cost=.0005+2*book.config.slippage_fraction+2*book.config.commission_fraction
             action,votes=signal(rows,family,side,threshold=threshold,roundtrip_cost=cost)
             signals[symbol]=dict(id=family+':'+last.isoformat(),action=action,votes=votes,source=data.source)
+            # Optional authenticated-source-metadata guard; only NEW paper entries.
+            # It never delays or prevents existing position exits or protective stops.
+            if news_guard and side==0 and action in ('buy','sell'):
+                from .news_sentiment import guard_entry
+                signals[symbol]=guard_entry(signals[symbol],symbol,now,fetch=news_fetch)
+                action=signals[symbol]['action']
             if action in ('buy','sell') and side==0 and evidence_report:
                 from .evidence import gate as evidence_gate
                 signals[symbol]=evidence_gate(signals[symbol],evidence_report,book.profile,symbol,family,threshold,book.config)
@@ -65,6 +71,7 @@ def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--market',choices=['stock','crypto'],required=True)
     p.add_argument('--symbols',nargs='+');p.add_argument('--db');p.add_argument('--strategy',choices=FAMILIES,default='trend');p.add_argument('--demo',action='store_true');p.add_argument('--once',action='store_true');p.add_argument('--interval',type=float,default=30)
     p.add_argument('--pause',action='store_true');p.add_argument('--resume',action='store_true')
+    p.add_argument('--news-guard',action='store_true',help='Optional GDELT publisher/time check for new paper entries; unavailable news blocks entry, never exits')
     p.add_argument('--grok-review',help='Optional review JSON; missing/invalid review blocks entries')
     p.add_argument('--grok-request',help='Export current proposed entry evidence JSON (one symbol)')
     p.add_argument('--stop',type=float);p.add_argument('--reward-risk',type=float,default=2)
@@ -92,7 +99,7 @@ def main():
     data=DemoData(a.market) if a.demo else BinanceData() if a.market=='crypto' else AlpacaData()
     try:
         while True:
-            try:print(json.dumps(tick(data,book,symbols,a.strategy,grok_review=a.grok_review,grok_request=a.grok_request,threshold=a.threshold,evidence_report=a.evidence_report),allow_nan=False),flush=True)
+            try:print(json.dumps(tick(data,book,symbols,a.strategy,grok_review=a.grok_review,grok_request=a.grok_request,threshold=a.threshold,evidence_report=a.evidence_report,news_guard=a.news_guard),allow_nan=False),flush=True)
             except Exception as exc:
                 book.health('error',data.source,type(exc).__name__)
                 print(json.dumps(dict(status='error',error_type=type(exc).__name__,message='No new entries; check feed, connectivity and freshness.')),flush=True)
