@@ -1,4 +1,6 @@
 import unittest
+import tempfile
+from pathlib import Path
 from brobs.alerts import PaperAlertService
 
 class AlertTests(unittest.TestCase):
@@ -13,6 +15,20 @@ class AlertTests(unittest.TestCase):
     def test_forex_midpoint_alert_is_rejected(self):
         with self.assertRaises(ValueError):
             self.s.handle({'secret':self.s.token,'event_id':'fx','symbol':'EUR_USD','market':'forex','action':'buy','price':1.1})
+    def test_operator_pause_blocks_new_entries_but_allows_exits(self):
+        with tempfile.TemporaryDirectory() as folder:
+            pause=Path(folder)/'pause.marker'
+            service=PaperAlertService(self.s.token,pause_file=str(pause))
+            def alert(key,action):
+                return {"secret":service.token,"event_id":key,"symbol":"BTCUSD","market":"crypto","action":action,"price":100}
+            self.assertEqual(service.handle(alert('buy1','buy'))['status'],'paper_filled')
+            pause.touch()
+            self.assertEqual(service.handle(alert('buy2','buy'))['status'],'paper_entries_paused')
+            self.assertEqual(service.handle(alert('sell1','sell'))['status'],'paper_filled')
+            self.assertEqual(service.broker.portfolio.positions,{})
+            pause.unlink()
+            self.assertEqual(service.handle(alert('buy2','buy'))['status'],'duplicate')
+            self.assertEqual(service.handle(alert('buy3','buy'))['status'],'paper_filled')
     def test_no_live_orders(self):
         self.assertFalse(hasattr(self.s,"live_broker"))
     def test_reject_market(self):
