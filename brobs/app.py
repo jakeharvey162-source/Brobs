@@ -7,6 +7,7 @@ from pathlib import Path
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from .fx import FXBook, FXConfig
 from .market_book import BOOKS,default_config
+from .operational_audit import report as operational_report
 
 def open_book(path,market=None):
     import sqlite3
@@ -30,6 +31,7 @@ def make_server(db_path,port=8767,market=None):
                 if self.path=='/':body=page;mime='text/html; charset=utf-8'
                 else:
                     state=book.snapshot()
+                    if self.path=='/api/state':state['operations_audit']=operational_report(state)
                     database=str(Path(db_path).resolve())
                     quoted="'"+database.replace("'","''")+"'" if os.name=='nt' else shlex.quote(database)
                     runner='python -m brobs.fx_runner' if state['profile']=='forex' else 'python -m brobs.market_runner --market '+state['profile']
