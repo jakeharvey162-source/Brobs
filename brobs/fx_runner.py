@@ -27,7 +27,7 @@ def tick(data, book, pairs=('EUR_USD',), granularity='H1', now=None, use_ml=Fals
             except Exception:pass # Missing/future/stale marks cannot invent a fill.
         raise
 
-def _signal_tick(data, book, pairs=('EUR_USD',), granularity='H1', now=None, use_ml=False, family='trend', grok_review=None, grok_request=None,threshold=None,evidence_report=None):
+def _signal_tick(data, book, pairs=('EUR_USD',), granularity='H1', now=None, use_ml=False, family='trend', grok_review=None, grok_request=None,threshold=None,evidence_report=None,macro_report=None):
     fixed_now = now is not None
     now = utc(now or datetime.now(timezone.utc))
     if granularity not in GRANULARITY_SECONDS or not pairs or any(p not in PAIRS for p in pairs):
