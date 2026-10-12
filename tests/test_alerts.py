@@ -35,3 +35,17 @@ class AlertTests(unittest.TestCase):
         with self.assertRaises(ValueError):self.s.handle({"secret":self.s.token,"event_id":"two","symbol":"BTCUSD","market":"invalid","action":"buy","price":100})
 
 if __name__=="__main__":unittest.main()
+
+
+class ConcurrentDuplicateTests(unittest.TestCase):
+    def test_simultaneous_identical_events_execute_once(self):
+        import threading
+        from brobs.alerts import PaperAlertService
+        service=PaperAlertService('x'*32)
+        payload={'secret':'x'*32,'event_id':'dup-1','symbol':'BTC_USDT','market':'crypto','action':'buy','price':100}
+        results=[]
+        def hit():results.append(service.handle(dict(payload))['status'])
+        threads=[threading.Thread(target=hit) for _ in range(12)]
+        [t.start() for t in threads];[t.join() for t in threads]
+        self.assertEqual(results.count('duplicate'),11)
+        self.assertEqual(len(service.broker.portfolio.positions),1)

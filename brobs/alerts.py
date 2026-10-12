@@ -1,5 +1,5 @@
 """TradingView-compatible paper-only webhook gateway. NEVER sends live orders."""
-import hmac,json,os
+import hmac,json,os,threading
 from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer
 from .models import Instrument,Market,Portfolio
 from .risk import RiskEngine
@@ -12,7 +12,12 @@ class PaperAlertService:
         self.pause_file=pause_file if pause_file is not None else os.environ.get('BROBS_ALERT_PAUSE_FILE')
         self.broker=PaperBroker(Portfolio(),RiskEngine())
         self.seen=set()
+        # ThreadingHTTPServer runs handlers concurrently: without a lock two identical
+        # webhooks could both pass the duplicate check and both execute.
+        self.lock=threading.Lock()
     def handle(self,payload):
+        with self.lock:return self._handle(payload)
+    def _handle(self,payload):
         if not isinstance(payload,dict): raise ValueError("JSON object required")
         if not hmac.compare_digest(str(payload.get("secret","")),self.token): raise PermissionError("Unauthorized")
         event_id=payload.get("event_id")
