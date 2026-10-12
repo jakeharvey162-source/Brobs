@@ -55,3 +55,12 @@ There is **no approved candidate**, no proven 80–90% win rate and no automatic
 - Freqtrade backtesting: https://www.freqtrade.io/en/stable/backtesting/
 - BROBS legacy comparisons: `docs/PRO_COMPARISON.md`
 - News source verification: `docs/NEWS_PROVENANCE.md`
+
+## Requested additions reviewed: God's EYE, Ruflo, Grok bots
+
+- **Ruflo** (`ruvnet/ruflo`, MIT, formerly Claude Flow): a multi-agent *orchestration* framework for Claude Code/Codex (swarms, memory, MCP tools). It contains no trading strategy, signal or broker logic, so integrating it cannot add a trading edge. It could only coordinate development work.
+- **God's EYE**: marketing pages found describe a closed, subscription analysis dashboard (multi-market signals with chat AI, from about $19/month) — not open source, so there is no code to integrate, and nothing there independently verifies performance. A separate TradingView script of the same name is an EMA-channel plus engulfing-candle indicator, a standard pattern with no published validation. Only marketing material was reviewed; neither was tested.
+- **Grok**: already integrated (`grok_method.py`, `grok_review.py`, `grok_research.py`) and documented in `docs/GROK.md`; it failed this repository's own profit and sample gates and is not enabled by default.
+- Marketplace bots advertising 75–100% win rates (Gumroad/TradingView listings) publish win rate only; none supply costs, drawdown, or out-of-sample trade logs. A high win rate can coexist with a net loss when average losses exceed average wins.
+
+None was added as a strategy. Any candidate should enter only via the gates in `docs/WIN_RATE_RESEARCH.md`: comparable held-out net profit after costs, sufficient trades, bounded drawdown.

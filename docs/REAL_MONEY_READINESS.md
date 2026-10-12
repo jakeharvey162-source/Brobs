@@ -84,3 +84,17 @@ Official sources:
 - OANDA API: https://developer.oanda.com/rest-live-v20/development-guide/
 - OANDA order endpoint: https://developer.oanda.com/rest-live-v20/order-ep/
 - Freqtrade dry-run: https://www.freqtrade.io/en/stable/configuration/
+
+## Status of the seven readiness items after the gateway work
+
+| # | Item | Status |
+|---|---|---|
+| 1 | Account eligibility, instrument/lot/precision rules | **Open.** USD, non-MT4, four USD pairs, whole units, 5-decimal prices enforced; real-account rules unverified |
+| 2 | Consented practice order with verified stop/target | **Open.** Needs your credentials; nothing was sent to a real broker |
+| 3 | Reconciliation (timeouts, restarts, rejections) | **Partial.** `LiveOrders.reconcile()` resolves uncertain attempts from broker order/trade lookups (fixture-tested). No continuous transaction-history reconciliation or fee accounting |
+| 4 | Broker-side exits, exactly-once, risk halts | **Partial.** Broker-side stop/target on every entry; `flatten()` emergency exit; daily-loss and per-day order ceilings |
+| 5 | No competing runners, emergency stop, least privilege | **Partial.** Journal bound to one account/env, one open position, operator stop file, `flatten`. No cross-journal lock; use one process per account |
+| 6 | Unseen-data replay and forward-paper expectancy | **Open and failing.** Measured strategy results show no demonstrated edge |
+| 7 | Independent security/operations review, explicit live approval | **Open.** The arming acknowledgement (`BROBS_LIVE_ARM`) is the explicit-approval mechanism; no external review |
+
+Arming remains a deliberate owner decision documented in [LIVE_TRADING.md](LIVE_TRADING.md); item 6 is why it is not recommended yet.

@@ -1,6 +1,6 @@
 # BROBS AI
 
-Forex research and autonomous **local paper trading**. Real-money execution is disabled. No guaranteed returns.
+Forex research and autonomous **local paper trading**, plus an optional broker gateway (`brobs/live_orders.py`, `brobs/live_alerts.py`) that is **disarmed by default**, fixture-tested only and never run against a real broker. No guaranteed returns and **no demonstrated edge** (see the measured results below). Read [LIVE_TRADING.md](docs/LIVE_TRADING.md) before arming anything.
 
 See [execution status and engine comparison](docs/EXECUTION_STATUS.md) for the separately tested OANDA practice-entry gateway, broker protection confirmation, remaining automation gaps and exactly which public projects were used. This gateway is not yet connected to the polling runner or dashboard.
 
@@ -25,7 +25,7 @@ Neither addition makes BROBS a verified 70%, 80% or 90% win-rate trading system.
 
 ## Free OANDA account check (practice or live, read-only)
 
-BROBS now includes `brobs/broker_readiness.py` for a real API authentication and account-state preflight, **GET requests only**. It checks broker positions, pending orders, USD account restrictions and unresolved local attempts. Neither this check nor any other BROBS switch places a **live-money order** or guarantees trading performance.
+BROBS now includes `brobs/broker_readiness.py` for a real API authentication and account-state preflight, **GET requests only**. It checks broker positions, pending orders, USD account restrictions and unresolved local attempts. The preflight itself never places an order. The separate, disarmed-by-default gateway in [LIVE_TRADING.md](docs/LIVE_TRADING.md) can, and nothing guarantees trading performance.
 
 ```powershell
 # Enter your own credentials privately in your terminal; never paste them into GitHub or chat.
@@ -121,7 +121,7 @@ The model tested at 50.74% direction accuracy against a 53.38% majority baseline
 
 ## Existing interfaces
 
-`brobs.forex_runner` remains the legacy research-only runner; `brobs.forex_dashboard` is its legacy ledger viewer. Use `brobs.fx_runner` and `brobs.app` for the new FX simulator. Crypto/stock research modules are preserved. TradingView's existing localhost gateway is a separate demo; forex midpoint-only alerts are rejected. No live order endpoint exists.
+`brobs.forex_runner` remains the legacy research-only runner; `brobs.forex_dashboard` is its legacy ledger viewer. Use `brobs.fx_runner` and `brobs.app` for the new FX simulator. Crypto/stock research modules are preserved. TradingView's existing localhost gateway is a separate demo; forex midpoint-only alerts are rejected by that paper gateway. Broker execution lives in the separate, explicitly armed `brobs.live_alerts` receiver, which sources its own bid/ask quotes.
 
 ## TradingView and win-rate research
 
