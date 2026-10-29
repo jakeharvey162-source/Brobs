@@ -26,7 +26,7 @@ def load_forex_csv(path):
             for row in rows:w.writerow({**{k:row[k] for k in ['open','high','low','close','volume']},'timestamp':row['datetime']})
         return load_csv(p)
 
-def replay(rows, start, config=None, spread=.00015, mode='multi_agent', signal_fn=None, row_signal_fn=None, book_class=FXBook, symbol='EUR_USD', spread_fraction=None):
+def replay(rows, start, config=None, spread=.00015, mode='multi_agent', signal_fn=None, row_signal_fn=None, book_class=FXBook, symbol='EUR_USD', spread_fraction=None, include_trades=False):
     if not 30 <= start < len(rows) or not math.isfinite(spread) or not 0 <= spread < .01:
         raise ValueError('Invalid start or spread')
     with closing(sqlite3.connect(':memory:')) as connection:
@@ -77,8 +77,13 @@ def replay(rows, start, config=None, spread=.00015, mode='multi_agent', signal_f
             at=utc(rows[-1]['timestamp'])+timedelta(microseconds=3)
             book.process(q(rows[-1]['close'],at),{symbol:dict(id='end',action='close')},'liquidate',at)
         s=book.snapshot()
-        return dict(**s['stats'],ending_equity=round(s['equity'],4),return_pct=round((s['equity']/s['initial_equity']-1)*100,4),
+        result = dict(**s['stats'],ending_equity=round(s['equity'],4),return_pct=round((s['equity']/s['initial_equity']-1)*100,4),
             max_drawdown_pct=round(s['max_drawdown']*100,4),halted_reason=s['halted_reason'])
+        if include_trades:
+            # Read every closed simulated trade, not the 100-entry dashboard slice.
+            result['trades'] = [json.loads(row[0]) for row in
+                                connection.execute('SELECT data FROM fx_trades ORDER BY id')]
+        return result
 
 def compare(rows, holdout=.3):
     if len(rows)<100 or not .2 <= holdout <= .5:raise ValueError('Need 100+ bars and a 20–50% holdout')
