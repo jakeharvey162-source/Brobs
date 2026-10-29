@@ -101,6 +101,19 @@ Stops are evaluated on polls. Gaps, outages and stopping the runner can exceed c
 
 ## Reproduce historical evidence
 
+For the combined offline audit, install the version-pinned validation dependencies and
+generate both report formats. This reads local files only and preserves the cash fallback:
+
+```bash
+python -m pip install -r requirements-validation.txt
+python -m brobs.research_report --as-of 2026-10-29T00:00:00+00:00 --output-json /tmp/offline-report.json --output-markdown /tmp/offline-report.md
+```
+
+See the [reproducibility and review guide](docs/REPRODUCIBLE_RESEARCH.md),
+[sample report](research/offline-report.md), and [machine-readable output](research/offline-report.json).
+Missing crypto candle files are reported explicitly; archived experiments are labelled
+as archived, and already-inspected periods are not independent unseen evidence.
+
 An MIT-licensed public EURUSD hourly evaluation sample is included with attribution. It is vendor-supplied historical data, not an independently certified feed.
 
 ```bash

@@ -1,0 +1,35 @@
+{
+  "file": "tradingview/BROBS_COUNCIL.pine",
+  "source_sha256": "ba2466c38e4bd3385a6bd48088ba67e5e65b37698aed3495761ca757b96fc4ab",
+  "main_commit": "16dfaf2a39fdf24ec9901ebdc3ef56edf904958a",
+  "compilation_status": "not_verified",
+  "compiler": "TradingView official Pine Editor v6",
+  "compiler_invoked": false,
+  "editor_attempt": {
+    "url": "https://www.tradingview.com/chart/",
+    "result": "proxy CONNECT HTTP 403 Forbidden",
+    "curl_exit_code": 56,
+    "required_initial_domain": "www.tradingview.com",
+    "evidence": "pine-editor-network.txt"
+  },
+  "static_contract_tests": {
+    "command": "python -m unittest discover -s tests -p test_tradingview_council.py -v",
+    "log": "Full test logs include test_tradingview_council; static tests are not compilation",
+    "interpretation": "Read-only source contract only; not Pine compilation"
+  },
+  "changes": "No Pine source changes made; no actual compiler error available to justify a correction",
+  "limitations": [
+    "TradingView chart page denied by current HTTP allowlist before editor load",
+    "No Pine compiler diagnostics or chart-rendering evidence available",
+    "Additional TradingView asset/compiler host requirements cannot be established until official editor is reachable",
+    "No unofficial parser/transpiler was substituted for the official compiler"
+  ],
+  "manual_verification": [
+    "Open https://www.tradingview.com/chart/ in a browser with authorized access.",
+    "Open Pine Editor and create a new indicator.",
+    "Paste the exact tradingview/BROBS_COUNCIL.pine source; verify source SHA-256 matches this record.",
+    "Select Add to chart. Capture Pine Editor compiler status and any exact error line/message, plus screenshot of indicator table if successful.",
+    "Record TradingView symbol/timeframe, browser, date, source revision and compiler result separately from Python CI.",
+    "Check current candle shows Wait for candle to close; invalid fast >= slow settings show no conclusion; confirm no strategy/order/alert instructions."
+  ]
+}

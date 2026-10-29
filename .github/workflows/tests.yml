@@ -1,5 +1,8 @@
 name: Paper trading validation
 on: [push, pull_request]
+defaults:
+  run:
+    shell: bash
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -11,8 +14,14 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
-      - run: python -m unittest discover -s tests -v
+      - run: python -m pip install -r requirements-validation.txt
+      - run: python -m unittest discover -s tests -v 2>&1 | tee /tmp/brobs-unittest.log
       - run: python -m brobs.loss_lab --csv research/data/EURUSD_1h.csv --output /tmp/brobs-loss-report.json
+      - name: Reproduce the offline report and compare both formats
+        run: |
+          python -m brobs.research_report --as-of 2026-10-29T00:00:00+00:00 --output-json /tmp/offline-report.json --output-markdown /tmp/offline-report.md
+          diff research/offline-report.json /tmp/offline-report.json
+          diff research/offline-report.md /tmp/offline-report.md
       - run: python -m brobs.demo
       - run: python -m brobs.fx_runner --demo --once --db demo_fx.db
       - run: python -m brobs.market_runner --market stock --demo --once --db demo_stock.db
@@ -21,6 +30,15 @@ jobs:
       - run: python -m brobs.market_runner --market crypto --demo --once --strategy grok_consensus --db demo_grok_crypto.db
       - run: python -m brobs.fx_runner --demo --once --strategy band_recovery --db demo_band_fx.db
       - run: python -m brobs.market_runner --market crypto --demo --once --strategy macd_swing --evidence-report research/lab-btc-evaluation.json --db demo_lab_crypto.db
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: offline-evidence-python-${{ matrix.python }}
+          path: |
+            /tmp/brobs-unittest.log
+            /tmp/brobs-loss-report.json
+            /tmp/offline-report.json
+            /tmp/offline-report.md
   research:
     runs-on: ubuntu-latest
     steps:
@@ -28,7 +46,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: pip install backtrader==1.9.78.123
+      - run: python -m pip install -r requirements-validation.txt
       - run: python -m brobs.fx_research --csv research/data/EURUSD_1h.csv
       - run: python -m brobs.reference --csv research/data/EURUSD_1h.csv
       - run: python -m brobs.fx_optimize --csv research/data/EURUSD_1h.csv --output /tmp/reversion-evaluation.json

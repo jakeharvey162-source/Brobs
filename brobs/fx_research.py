@@ -11,24 +11,34 @@ from pathlib import Path
 from .fx import FXBook, FXConfig, utc
 from .fx_signals import decide
 from .history import load_csv
+from .historical_validation import validate_rows
 
-def load_forex_csv(path):
+def load_forex_csv(path, **validation):
     # Normalize common public-data timestamp heading, retaining validation.
     with open(path,newline='',encoding='utf-8') as f:
-        rows=list(csv.DictReader(f))
+        reader=csv.DictReader(f)
+        if reader.fieldnames and len(set(reader.fieldnames)) != len(reader.fieldnames):
+            raise ValueError('Historical CSV has duplicate columns')
+        rows=list(reader)
     if not rows:raise ValueError('Empty CSV')
-    if 'timestamp' in rows[0]:return load_csv(path)
+    if any(None in row for row in rows):raise ValueError('Historical CSV row has unexpected extra columns')
+    if 'timestamp' in rows[0]:return load_csv(path, **validation)
     if 'datetime' not in rows[0]:raise ValueError('timestamp or datetime header required')
+    if any(field not in rows[0] for field in ('open','high','low','close','volume')):
+        raise ValueError('Historical CSV requires datetime and OHLCV columns')
     with tempfile.TemporaryDirectory() as folder:
         p=Path(folder)/'normalized.csv'
         with p.open('w',newline='') as f:
             w=csv.DictWriter(f,fieldnames=['timestamp','open','high','low','close','volume']);w.writeheader()
             for row in rows:w.writerow({**{k:row[k] for k in ['open','high','low','close','volume']},'timestamp':row['datetime']})
-        return load_csv(p)
+        return load_csv(p, **validation)
 
-def replay(rows, start, config=None, spread=.00015, mode='multi_agent', signal_fn=None, row_signal_fn=None, book_class=FXBook, symbol='EUR_USD', spread_fraction=None, include_trades=False):
-    if not 30 <= start < len(rows) or not math.isfinite(spread) or not 0 <= spread < .01:
+def replay(rows, start, config=None, spread=.00015, mode='multi_agent', signal_fn=None, row_signal_fn=None, book_class=FXBook, symbol='EUR_USD', spread_fraction=None, include_trades=False, interval=None, market=None, as_of=None):
+    rows=validate_rows(rows,interval=interval,market=market,as_of=as_of,require_volume=False)
+    if isinstance(start,bool) or not isinstance(start,int) or not 30 <= start < len(rows) or isinstance(spread,bool) or not isinstance(spread,(int,float)) or not math.isfinite(spread) or not 0 <= spread < .01:
         raise ValueError('Invalid start or spread')
+    if spread_fraction is not None and (isinstance(spread_fraction,bool) or not isinstance(spread_fraction,(int,float)) or not math.isfinite(spread_fraction) or not 0 <= spread_fraction < .01):
+        raise ValueError('Invalid spread fraction')
     with closing(sqlite3.connect(':memory:')) as connection:
         class ReplayBook(book_class):
             history_limit=0 # UI history is not needed inside each replay tick.
@@ -43,7 +53,6 @@ def replay(rows, start, config=None, spread=.00015, mode='multi_agent', signal_f
         for i in range(start,len(rows)):
             r=rows[i];t=utc(r['timestamp'])
             if spread_fraction is not None:
-                if not math.isfinite(spread_fraction) or not 0 <= spread_fraction < .01:raise ValueError('Invalid spread fraction')
                 bar_spread=r['open']*spread_fraction
             closes=[row['close'] for row in rows[max(0,i-200):i]]
             if row_signal_fn is not None:

@@ -7,7 +7,7 @@ import argparse
 import csv
 import hashlib
 import json
-from bisect import bisect_left
+from bisect import bisect_left, bisect_right
 from collections import Counter, defaultdict
 from datetime import datetime, timedelta, timezone
 from math import isfinite
@@ -16,9 +16,11 @@ from statistics import mean, pstdev
 from urllib.parse import urlsplit
 
 from .fx_research import load_forex_csv, replay
+from .historical_validation import validate_rows
 
 UTC = timezone.utc
 MIN_BUCKET_TRADES = 8
+FOREX_BAR_DURATION = timedelta(hours=1)
 
 
 def timestamp(value):
@@ -34,71 +36,137 @@ def timestamp(value):
     return stamp.astimezone(UTC)
 
 
+def _validated_news(news):
+    """Validate direct callers as well as CSV input; metadata is not truth."""
+    events = []
+    for row in news:
+        if not isinstance(row, dict):
+            raise ValueError("News event must be a mapping")
+        try:
+            published = timestamp(row["published_at"])
+            available = timestamp(row["available_at"])
+            url, label = row["source_url"], row["event_label"]
+        except (KeyError, TypeError) as exc:
+            raise ValueError("News event missing required fields") from exc
+        if not isinstance(url, str) or not isinstance(label, str):
+            raise ValueError("Invalid news provenance or event label")
+        url, label = url.strip(), label.strip()
+        parsed = urlsplit(url)
+        if (available < published or parsed.scheme != "https" or not parsed.hostname
+                or parsed.username is not None or parsed.password is not None):
+            raise ValueError("Invalid news provenance or timing")
+        if not label or len(label) > 160:
+            raise ValueError("Invalid event label")
+        events.append(dict(published_at=published, available_at=available,
+                           source_url=url, event_label=label))
+    return sorted(events, key=lambda item: (item["available_at"], item["published_at"],
+                                           item["source_url"], item["event_label"]))
+
+
 def load_news_metadata(path):
     """Load optional user-supplied historical metadata; no news is verified."""
     if path is None:
         return []
-    events = []
     with open(path, newline="", encoding="utf-8") as source:
         reader = csv.DictReader(source)
         required = {"published_at", "available_at", "source_url", "event_label"}
         if not reader.fieldnames or not required.issubset(reader.fieldnames):
             raise ValueError("News CSV missing required columns")
-        for row in reader:
-            published = timestamp(row["published_at"])
-            available = timestamp(row["available_at"])
-            url = (row["source_url"] or "").strip()
-            label = (row["event_label"] or "").strip()
-            parsed = urlsplit(url)
-            if available < published or parsed.scheme != "https" or not parsed.hostname:
-                raise ValueError("Invalid news provenance or timing")
-            if not label or len(label) > 160:
-                raise ValueError("Invalid event label")
-            events.append(dict(published_at=published, available_at=available,
-                               source_url=url, event_label=label))
-    return sorted(events, key=lambda item: item["available_at"])
+        return _validated_news(reader)
+
+
+class _NewsIndex:
+    """Index availability once; existence queries cost O(log news rows)."""
+    def __init__(self, news, max_age_hours=24):
+        if (isinstance(max_age_hours, bool)
+                or not isinstance(max_age_hours, (int, float))
+                or not isfinite(max_age_hours) or max_age_hours <= 0):
+            raise ValueError("News age window must be positive and finite")
+        try:
+            self.window = timedelta(hours=max_age_hours)
+        except OverflowError as exc:
+            raise ValueError("News age window is too large") from exc
+        self.events = _validated_news(news)
+        self.available_at = [item["available_at"] for item in self.events]
+        self.latest_expiry = []
+        latest = None
+        for item in self.events:
+            try:
+                expiry = item["published_at"] + self.window
+            except OverflowError as exc:
+                raise ValueError("News timestamp exceeds supported date range") from exc
+            latest = expiry if latest is None else max(latest, expiry)
+            self.latest_expiry.append(latest)
+
+    def has_available(self, when):
+        last = bisect_right(self.available_at, when) - 1
+        return last >= 0 and self.latest_expiry[last] >= when
+
+    def available(self, when):
+        first = bisect_left(self.available_at, when - self.window)
+        last = bisect_right(self.available_at, when)
+        # Late ingestion cannot make an old publication fresh again.
+        return [item for item in self.events[first:last]
+                if when - item["published_at"] <= self.window]
 
 
 def available_news(news, at, max_age_hours=24):
-    """Exclude both future publication and delayed ingestion."""
-    when = timestamp(at)
-    window = timedelta(hours=max_age_hours)
-    return [item for item in news
-            if item["published_at"] <= item["available_at"] <= when
-            and when - item["available_at"] <= window]
+    """Exclude future and stale publication AND availability timestamps."""
+    return _NewsIndex(news, max_age_hours).available(timestamp(at))
 
 
-def entry_regime(rows, at):
-    """Categorize only closed bars STRICTLY preceding entry."""
-    when = timestamp(at)
-    prior_count = bisect_left([timestamp(row["timestamp"]) for row in rows], when)
-    if prior_count < 101:
-        return "insufficient_prior_bars"
-    closes = [r["close"] for r in rows[prior_count - 101:prior_count]]
-    if any(not isfinite(x) or x <= 0 for x in closes):
-        raise ValueError("Invalid historical prices")
-    gap = mean(closes[-8:]) / mean(closes[-21:]) - 1
-    trend = "up" if gap > .0001 else "down" if gap < -.0001 else "mixed"
-    returns = [b / a - 1 for a, b in zip(closes, closes[1:])]
-    near, prior = pstdev(returns[-20:]), pstdev(returns)
-    volatility = "elevated" if prior > 0 and near > prior * 1.5 else "ordinary"
-    return trend + "/" + volatility
+class _HistoryIndex:
+    """Precompute bar completion times once, not once per closed trade."""
+    def __init__(self, rows, bar_duration=FOREX_BAR_DURATION):
+        if not isinstance(bar_duration, timedelta) or bar_duration <= timedelta(0):
+            raise ValueError("A positive bar duration is required")
+        self.rows = validate_rows(rows, min_rows=1)
+        self.completed_at = [row["timestamp"] + bar_duration for row in self.rows]
+        self.closes = [row["close"] for row in self.rows]
+
+    def regime(self, when):
+        prior_count = bisect_right(self.completed_at, when)
+        if prior_count < 101:
+            return "insufficient_prior_bars"
+        closes = self.closes[prior_count - 101:prior_count]
+        gap = mean(closes[-8:]) / mean(closes[-21:]) - 1
+        trend = "up" if gap > .0001 else "down" if gap < -.0001 else "mixed"
+        returns = [b / a - 1 for a, b in zip(closes, closes[1:])]
+        near, prior = pstdev(returns[-20:]), pstdev(returns)
+        volatility = "elevated" if prior > 0 and near > prior * 1.5 else "ordinary"
+        return trend + "/" + volatility
 
 
-def profile(trades, rows, news=()):
-    """Diagnostic loss groups, never future probabilities."""
+def entry_regime(rows, at, *, bar_duration=FOREX_BAR_DURATION):
+    """Categorize completed candles only; a current candle's close is unknown."""
+    return _HistoryIndex(rows, bar_duration).regime(timestamp(at))
+
+
+def _profile(trades, history, news_index):
     buckets = defaultdict(list)
-    reasons = Counter()
+    reasons, loss_reasons = Counter(), Counter()
     news_seen = 0
+    closed_trades = 0
     for trade in trades:
-        opened, closed = timestamp(trade["opened_at"]), timestamp(trade["closed_at"])
-        pnl = trade["pnl"]
+        if not isinstance(trade, dict):
+            raise ValueError("Trade result must be a mapping")
+        try:
+            opened, closed = timestamp(trade["opened_at"]), timestamp(trade["closed_at"])
+            pnl = trade["pnl"]
+        except KeyError as exc:
+            raise ValueError("Trade result missing required fields") from exc
         if (closed < opened or isinstance(pnl, bool)
                 or not isinstance(pnl, (int, float)) or not isfinite(pnl)):
             raise ValueError("Invalid trade result")
-        buckets[entry_regime(rows, opened)].append(pnl)
-        reasons[trade.get("reason", "unknown")] += 1
-        if available_news(news, opened):
+        buckets[history.regime(opened)].append(pnl)
+        reason = trade.get("reason", "unknown")
+        if not isinstance(reason, str):
+            raise ValueError("Invalid trade exit reason")
+        reasons[reason] += 1
+        if pnl < -1e-9:
+            loss_reasons[reason] += 1
+        closed_trades += 1
+        if news_index.has_available(opened):
             news_seen += 1
     result = []
     for regime, pnls in sorted(buckets.items()):
@@ -106,36 +174,48 @@ def profile(trades, rows, news=()):
         losses = sum(p < -1e-9 for p in pnls)
         net = sum(pnls)
         result.append(dict(regime=regime, trades=len(pnls), wins=wins, losses=losses,
+                           breakeven=len(pnls) - wins - losses,
                            net_pnl=round(net, 4),
                            observed_win_pct=round(100 * wins / len(pnls), 2),
                            review_flag=(len(pnls) >= MIN_BUCKET_TRADES
                                         and losses > wins and net < 0)))
-    return dict(buckets=result, closed_trades=len(trades),
-                loss_reasons=dict(sorted(reasons.items())),
+    return dict(buckets=result, closed_trades=closed_trades,
+                loss_reasons=dict(sorted(loss_reasons.items())),
+                exit_reasons=dict(sorted(reasons.items())),
                 entries_with_prior_news_metadata=news_seen,
                 caveat="Historical research only; news metadata not independently verified")
 
 
+def profile(trades, rows, news=(), *, bar_duration=FOREX_BAR_DURATION):
+    """Diagnostic loss groups, never future probabilities.
+
+    Validate/index bars once and sort/index news once. Per-trade lookup is
+    O(log bars + log news) plus a fixed 101-candle regime window, rather
+    than rescanning every candle and news event for each trade.
+    """
+    return _profile(trades, _HistoryIndex(rows, bar_duration), _NewsIndex(news))
+
+
 def evaluate(rows, news=()):
     """Compare fixed strategy training and reused later period; no promotion."""
-    if len(rows) < 600:
-        raise ValueError("At least 600 historical bars are required")
-    for earlier, later in zip(rows, rows[1:]):
-        if timestamp(earlier["timestamp"]) >= timestamp(later["timestamp"]):
-            raise ValueError("Chronological data required")
+    rows = validate_rows(rows, min_rows=600)
+    history, news_index = _HistoryIndex(rows), _NewsIndex(news)
     count = len(rows)
     start, cutoff = int(count * .3), int(count * .7)
     earlier = replay(rows[:cutoff], start, include_trades=True)
     later = replay(rows, cutoff, include_trades=True)
     earlier_trades = earlier.pop("trades")
     later_trades = later.pop("trades")
-    earlier_profile = profile(earlier_trades, rows[:cutoff], news)
-    later_profile = profile(later_trades, rows, news)
+    earlier_profile = _profile(earlier_trades, history, news_index)
+    later_profile = _profile(later_trades, history, news_index)
     flags = [b["regime"] for b in earlier_profile["buckets"] if b["review_flag"]]
     followup = [b for b in later_profile["buckets"] if b["regime"] in flags]
     return dict(
         version=1, mode="READ_ONLY_HISTORICAL_PAPER_RESEARCH",
         execution_enabled=False,
+        validation_status="not_validated",
+        holdout_status="previously_inspected_contaminated",
+        selected_parameters=None, cash_fallback=True,
         source="BROBS existing fixed-parameter forex research strategy",
         train=dict(start=timestamp(rows[start]["timestamp"]).isoformat(),
                    last_bar=timestamp(rows[cutoff - 1]["timestamp"]).isoformat(),
@@ -148,8 +228,9 @@ def evaluate(rows, news=()):
             later_outcomes_in_flagged_regimes=followup,
             outcome="Diagnostic watchlist only; strategy and risk parameters unchanged",
             minimum_bucket_trades=MIN_BUCKET_TRADES),
-        news=dict(metadata_rows=len(news),
+        news=dict(metadata_rows=len(news_index.events),
                   entries_with_pre_entry_metadata=later_profile["entries_with_prior_news_metadata"],
+                  metadata_provenance="user_supplied_not_independently_verified",
                   limitation="No news fetched; future publication/availability never included. Unexpected public statements cannot be forecast."),
         limitations=[
             "Later EURUSD period has already been inspected in past BROBS research; not an unseen test",
@@ -168,6 +249,8 @@ def main():
     rows = load_forex_csv(args.csv)
     result = evaluate(rows, load_news_metadata(args.news_csv))
     result["input_sha256"] = hashlib.sha256(Path(args.csv).read_bytes()).hexdigest()
+    if args.news_csv:
+        result["news_input_sha256"] = hashlib.sha256(Path(args.news_csv).read_bytes()).hexdigest()
     Path(args.output).write_text(json.dumps(result, indent=2, allow_nan=False) + "\n", encoding="utf-8")
     print(json.dumps({
         "mode": result["mode"],

@@ -1,28 +1,22 @@
 """Load user-provided historical OHLCV data from a CSV file."""
 import csv
-from datetime import datetime, timezone
-from math import isfinite
+from .historical_validation import FIELDS, validate_rows
 
-def load_csv(path):
+def load_csv(path, **validation):
+    """Read OHLCV with explicit timezones (``allow_naive_utc=True`` opts in to legacy UTC)."""
     rows = []
     with open(path, newline="", encoding="utf-8") as source:
-        for item in csv.DictReader(source):
-            timestamp = datetime.fromisoformat(item["timestamp"].replace("Z", "+00:00"))
-            if timestamp.tzinfo is None:
-                timestamp = timestamp.replace(tzinfo=timezone.utc)
-            row = {"timestamp": timestamp}
-            for field in ("open", "high", "low", "close", "volume"):
-                value = float(item[field])
-                if not isfinite(value) or value < 0:
-                    raise ValueError("Invalid market data")
-                row[field] = value
-            if min(row["open"], row["high"], row["low"], row["close"]) <= 0:
-                raise ValueError("Invalid prices")
-            if row["low"] > min(row["open"], row["close"]) or row["high"] < max(row["open"], row["close"]):
-                raise ValueError("Inconsistent price range")
-            if rows and timestamp <= rows[-1]["timestamp"]:
-                raise ValueError("Out-of-order timestamps")
+        reader = csv.DictReader(source)
+        if not reader.fieldnames or not {"timestamp", *FIELDS}.issubset(reader.fieldnames):
+            raise ValueError("Historical CSV requires timestamp and OHLCV columns")
+        if len(set(reader.fieldnames)) != len(reader.fieldnames):
+            raise ValueError("Historical CSV has duplicate columns")
+        for item in reader:
+            if None in item:
+                raise ValueError("Historical CSV row has unexpected extra columns")
+            try:
+                row = dict(timestamp=item["timestamp"], **{field: float(item[field]) for field in FIELDS})
+            except (TypeError, ValueError) as exc:
+                raise ValueError("Malformed historical OHLCV row") from exc
             rows.append(row)
-    if len(rows) < 30:
-        raise ValueError("At least 30 observations required")
-    return rows
+    return validate_rows(rows, **validation)
