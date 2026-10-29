@@ -1,0 +1,68 @@
+//@version=6
+// Educational, read-only BROBS market-observation panel.
+// This is NOT the Python AI council. It cannot place trades or predict win odds.
+indicator("BROBS Research Council | Observations Only", shorttitle="BROBS Council", overlay=true)
+
+fastLength = input.int(8, "Fast average length", minval=2, maxval=200)
+slowLength = input.int(21, "Slow average length", minval=2, maxval=300)
+baselineLength = input.int(100, "Long-term average length", minval=20, maxval=500)
+rsiLength = input.int(14, "Momentum RSI length", minval=2, maxval=100)
+volLength = input.int(20, "Volatility lookback", minval=5, maxval=200)
+highVolPct = input.float(2.0, "Elevated bar-to-bar volatility (%)", minval=0.1, maxval=100.0, step=0.1)
+showAverages = input.bool(true, "Show chart averages")
+
+fastAverage = ta.sma(close, fastLength)
+slowAverage = ta.sma(close, slowLength)
+baselineAverage = ta.sma(close, baselineLength)
+rsiValue = ta.rsi(close, rsiLength)
+barReturnPct = close[1] > 0 ? 100.0 * (close / close[1] - 1.0) : na
+volatilityPct = ta.stdev(barReturnPct, volLength)
+
+periodsValid = fastLength < slowLength
+historyRequired = math.max(baselineLength, math.max(slowLength, math.max(fastLength, math.max(rsiLength + 1, volLength + 1))))
+enoughHistory = bar_index + 1 >= historyRequired
+dataReady = periodsValid and enoughHistory and close > 0 and not na(fastAverage) and not na(slowAverage) and not na(baselineAverage) and not na(rsiValue) and not na(volatilityPct)
+
+string trendState = "Unavailable"
+string momentumState = "Unavailable"
+string volatilityState = "Unavailable"
+string qualityState = not periodsValid ? "Fast length must be shorter" : not enoughHistory ? "More historical bars needed" : dataReady ? "Historical indicators available" : "Missing/invalid bar data"
+string councilState = "No research conclusion"
+
+if dataReady
+    trendState := fastAverage > slowAverage and close > baselineAverage ? "Rising" : fastAverage < slowAverage and close < baselineAverage ? "Falling" : "Mixed"
+    momentumState := rsiValue > 55 ? "Positive" : rsiValue < 45 ? "Negative" : "Balanced"
+    volatilityState := volatilityPct > highVolPct ? "Elevated" : "Within chosen threshold"
+    if not barstate.isconfirmed
+        councilState := "Wait for candle to close"
+    else if volatilityPct > highVolPct
+        councilState := "Caution: elevated volatility"
+    else if trendState == "Rising" and momentumState == "Positive"
+        councilState := "Upward observations align"
+    else if trendState == "Falling" and momentumState == "Negative"
+        councilState := "Downward observations align"
+    else
+        councilState := "Mixed evidence: no conclusion"
+
+plot(showAverages ? fastAverage : na, title="Fast average", color=color.teal)
+plot(showAverages ? slowAverage : na, title="Slow average", color=color.orange)
+plot(showAverages ? baselineAverage : na, title="Long-term average", color=color.new(color.gray, 55))
+
+var table council = table.new(position.top_right, 2, 8, border_width=1, frame_color=color.gray)
+if barstate.islast
+    table.cell(council, 0, 0, "BROBS / RESEARCH", bgcolor=color.new(color.blue, 55), text_color=color.white)
+    table.cell(council, 1, 0, syminfo.tickerid, bgcolor=color.new(color.blue, 55), text_color=color.white)
+    table.cell(council, 0, 1, "Trend", text_color=color.white)
+    table.cell(council, 1, 1, trendState, text_color=color.white)
+    table.cell(council, 0, 2, "Momentum", text_color=color.white)
+    table.cell(council, 1, 2, momentumState, text_color=color.white)
+    table.cell(council, 0, 3, "Volatility", text_color=color.white)
+    table.cell(council, 1, 3, volatilityState, text_color=color.white)
+    table.cell(council, 0, 4, "Data review", text_color=color.white)
+    table.cell(council, 1, 4, qualityState, text_color=color.white)
+    table.cell(council, 0, 5, "Council summary", text_color=color.white)
+    table.cell(council, 1, 5, councilState, text_color=color.white)
+    table.cell(council, 0, 6, "Timeframe", text_color=color.white)
+    table.cell(council, 1, 6, timeframe.period + " (per-chart)", text_color=color.white)
+    table.cell(council, 0, 7, "Trading status", text_color=color.white)
+    table.cell(council, 1, 7, "READ ONLY / NO ORDERS", text_color=color.orange)
