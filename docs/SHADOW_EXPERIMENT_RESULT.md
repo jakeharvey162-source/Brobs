@@ -9,7 +9,7 @@ The base EURUSD dataset has 3,162 hourly observations and the later 30% holds 94
 
 A training-only diagnostic rule (at least eight prior trades in a regime, more losses than wins, and negative net closed-trade P&L) flags loss-prone market regimes. An offline shadow variant preserves the baseline forex decision function, prices, costs, and `FXBook` risk engine, but abstains from new entries in those regimes. Existing position exits and protective handling cannot be vetoed. Nothing is modified in default trading, live connectors or reference artifacts.
 
-The earlier training segment yielded 60 completed trades, 9 winners, and the flagged regimes `down/ordinary` and `up/ordinary`. The later shadow run vetoed **358 new-entry signals**. These are candidate signals, **not 358 actual trades**.
+The earlier training segment yielded 60 completed trades, 9 winners, 51 losses, 0 breakevens, -1.6056% return, -160.5593 USD net P&L and 1.6111% maximum drawdown, with the flagged regimes `down/ordinary` and `up/ordinary`. The later shadow run vetoed **358 new-entry signals**. These are candidate signals, **not 358 actual trades**.
 
 ## Previously inspected later EURUSD comparison
 
@@ -33,10 +33,10 @@ The original reference and the separate multi-market trend-study report must not
 
 Normal FX spread=0.00015; stressed spread=0.00030 with commission_fraction=0.00005. Baseline slippage_fraction=0.00005 remains unchanged. The results include spread, slippage and commission through the paper fill model, but do **not** include an individually audited realized cost ledger, historical venue quotes, financing swaps, liquidity/partial fills, or market impact.
 
-The public EURUSD candles are vendor-sourced and their exact original timestamp/content quality has not been independently certified. The optional archived news CSV was **not supplied** (0 externally verified historical events). Paper replay cannot reliably reconstruct market reactions to unannounced headlines. The BTC raw historical archive is not checked into this repository, so a fresh independent end-to-end crypto result was **not** run here. AAPL data is old and unadjusted.
+The public EURUSD candles are vendor-sourced and their exact original timestamp/content quality has not been independently certified. The research data audit found 26 intervals greater than 1.5 hours, with a largest gap of 49 hours, across 3,162 chronologically ordered hourly bars (2026-03-26 03:00 UTC through 2026-09-25 20:00 UTC). Forex weekend closures may explain some gaps; no vendor-calendar reconciliation was performed, no candles were silently filled, and the origin of each gap is not independently verified. The optional archived news CSV was **not supplied** (0 externally verified historical events). Paper replay cannot reliably reconstruct market reactions to unannounced headlines. The BTC raw historical archive is not checked into this repository, so a fresh independent end-to-end crypto result was **not** run here. AAPL data is old and unadjusted.
 
 ## Software verification, not profitability verification
 
-GitHub Actions PR run #41192667648 completed successfully: **226 unit/regression tests on Python 3.11 and 226 on 3.12**, plus the separate research-determinism job. The same run independently executed the historical loss report and this shadow comparison. Latest PR runs should be checked again after subsequent edits; archived JSON artifacts will be attached by the updated CI.
+GitHub Actions PR run #41192667648 completed successfully: **226 unit/regression tests on Python 3.11 and 226 on 3.12**, plus the separate research-determinism job. The same run independently executed the historical loss report and this shadow comparison. A subsequent successful push run (https://github.com/jakeharvey162-source/Brobs/actions/runs/41192957633) archived the full loss report and shadow comparison in per-Python-version GitHub Actions artifacts. Recheck the latest commit before review.
 
 **Decision: reject this loss-screen rule.** Do not tune it against the already viewed later period. Freeze any new hypothesis before collecting fresh forward paper observations, and report it whether it wins or fails. Real-money execution remains disabled.
