@@ -39,3 +39,22 @@ News must be timestamped using when the system actually could access it. No mode
 ## Limits
 
 This release is offline/paper-only. Its training review flags do not auto-adapt or trade. The historical forex replay omits swaps, liquidity and some broker execution behavior. Passing software tests is not evidence of reliable future earnings.
+
+
+## Follow-up: controlled loss-screen shadow experiment (31 October 2026)
+
+The original PR #4 is merged. The separate \`brobs.independent_validation\` experiment now tests a **frozen, training-derived** veto against the unmodified forex replay, without changing the default signals, order APIs or risk parameters. A veto can affect **new entries only**; existing-position management and protective exits remain with \`FXBook\`. For every tested later period the report includes:
+
+- Baseline and loss-screen paper closed trades, wins, losses, break-even trades, P&L, returns, profit factor and max drawdown.
+- A higher-cost baseline and higher-cost screen (0.0003 spread, commission_fraction 0.00005), the number of entry signals screened, and an explicit failure/inconclusive label.
+- OHLCV chronology/range checks and descriptive timestamp-gap counts. Gaps are never filled by invented bars. Historical data source integrity must still be independently established.
+- Contextual news rows are accepted only when **published and actually available strictly before** an entry. Same-timestamp observations are excluded conservatively.
+- No automatic promotion, no trading-policy changes, no online fitting and no live-money path.
+
+Run: \`python -m brobs.independent_validation --csv research/data/EURUSD_1h.csv --output /tmp/brobs-independent-validation.json\`
+
+The code deliberately sets \`improved_win_rate_verified=false\`. Even a numerically better shadow return is an **exploratory comparison on a previously inspected** later interval. No new independent trading history is supplied, and the program must not present the result as confirmed out-of-sample improvement. Costs are represented in spread/slippage/commission assumptions and scenario P&L, **not** an auditable breakdown of each realized fee.
+
+**Preserved published benchmarks, not new measurements:** the original EUR/USD fixed multi-agent reference has 28 closed trades (11 wins, 17 losses), +0.2923% return and 0.1906% maximum drawdown; its higher-cost run returned +0.1663%. The separate multi-market default-trend research logged EUR/USD 28 (11/17, +0.2810%), AAPL 8 (6/2, +3.9589%), BTC/USDT 55 (15/40, -1.2204%) with recorded cost-stressed returns of +0.0886%, +3.8034%, and -2.7066% respectively. Thirty explored multi-market candidates produced **zero qualified replacements**. These datasets, models, currencies and sample sizes cannot legitimately be pooled to assert an edge.
+
+Further independent evaluation requires **new prospectively frozen paper observations**, vendor-matched executable quotes and fee records, archived-news provenance verified separately from the model, and enough comparable outcomes for uncertainty and drawdown analysis. The BTC archive candles are not committed, so CI cannot independently reproduce that archive without reacquisition and checksum verification. The AAPL dataset is an old, unadjusted daily series. Failed hypotheses must remain visible.
