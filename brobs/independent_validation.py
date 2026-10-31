@@ -149,6 +149,8 @@ def main():
                                  encoding="utf-8")
     metrics = result["evaluation"]
     print(json.dumps(dict(mode=result["mode"], execution_enabled=False,
+                          dataset_audit=result["dataset_audit"],
+                          training_baseline=result["training"]["baseline"],
                           training_flags=result["training"]["flagged_regimes"],
                           vetoed_entry_signals=metrics["vetoed_entry_signals"],
                           baseline=metrics["baseline"], screened=metrics["screened"],
