@@ -2,14 +2,14 @@
 
 **Status: no performance improvement demonstrated. No promotion. Paper-only.**
 Source run: https://github.com/jakeharvey162-source/Brobs/actions/runs/41192667648
-Code: \`brobs/independent_validation.py\` in draft PR #6.
+Code: `brobs/independent_validation.py` in draft PR #6.
 The base EURUSD dataset has 3,162 hourly observations and the later 30% holds 949 bars. This is **previously inspected** data, not a new out-of-sample evaluation.
 
 ## Hypothesis and methodology
 
-A training-only diagnostic rule (at least eight prior trades in a regime, more losses than wins, and negative net closed-trade P&L) flags loss-prone market regimes. An offline shadow variant preserves the baseline forex decision function, prices, costs, and \`FXBook\` risk engine, but abstains from new entries in those regimes. Existing position exits and protective handling cannot be vetoed. Nothing is modified in default trading, live connectors or reference artifacts.
+A training-only diagnostic rule (at least eight prior trades in a regime, more losses than wins, and negative net closed-trade P&L) flags loss-prone market regimes. An offline shadow variant preserves the baseline forex decision function, prices, costs, and `FXBook` risk engine, but abstains from new entries in those regimes. Existing position exits and protective handling cannot be vetoed. Nothing is modified in default trading, live connectors or reference artifacts.
 
-The earlier training segment yielded 60 completed trades, 9 winners, and the flagged regimes \`down/ordinary\` and \`up/ordinary\`. The later shadow run vetoed **358 new-entry signals**. These are candidate signals, **not 358 actual trades**.
+The earlier training segment yielded 60 completed trades, 9 winners, and the flagged regimes `down/ordinary` and `up/ordinary`. The later shadow run vetoed **358 new-entry signals**. These are candidate signals, **not 358 actual trades**.
 
 ## Previously inspected later EURUSD comparison
 
