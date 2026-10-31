@@ -98,8 +98,11 @@ class IndependentValidationTests(unittest.TestCase):
                          output["evaluation"]["baseline"]["wins"]
                          + output["evaluation"]["baseline"]["losses"]
                          + output["evaluation"]["baseline"]["breakeven"])
-        self.assertEqual(output["evaluation"]["screened"]["ending_equity"],
-                         output["evaluation"]["screened"]["ending_equity"])
+        screened = output["evaluation"]["screened"]
+        self.assertAlmostEqual(screened["ending_equity"] - 10000,
+                               screened["net_pnl"], places=3)
+        self.assertIn("baseline_higher_cost", output["evaluation"])
+        self.assertIn("screened_higher_cost", output["evaluation"])
 
 
 if __name__ == "__main__":
