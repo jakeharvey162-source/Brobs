@@ -60,11 +60,11 @@ def load_news_metadata(path):
 
 
 def available_news(news, at, max_age_hours=24):
-    """Exclude both future publication and delayed ingestion."""
+    """Require publication AND ingestion strictly before the entry instant."""
     when = timestamp(at)
     window = timedelta(hours=max_age_hours)
     return [item for item in news
-            if item["published_at"] <= item["available_at"] <= when
+            if item["published_at"] <= item["available_at"] < when
             and when - item["available_at"] <= window]
 
 
